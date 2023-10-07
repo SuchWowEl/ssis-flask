@@ -24,39 +24,22 @@ def create_app(test_config=None):
 
     # from .user import user_bp as user_blueprint
     # app.register_blueprint(user_blueprint)
-    from . import models
-    student_interface = models.Student(mysql)
+    # from . import models
+    # student_interface = models.Student(mysql)
     
-    @app.route('/', defaults={'path': ''})
-    @app.route('/<path:path>', methods=('GET', 'POST'))
-    def catch_all(path):
+    # @app.route('/', defaults={'path': ''})
+    # @app.route('/<path:path>', methods=('GET', 'POST'))
+    # def catch_all(path):
+    @app.route('/')
+    def home():
         # return render_template("base.html")
         return app.send_static_file("base.html")
     
+    from .students import students
+    app.register_blueprint(students.bp)
+    
     # from controller.student import user_bp as user_blueprint
     # app.register_blueprint(user_blueprint)
-    
-    @app.route('/students')
-    def students():
-        student_table = student_interface.all()
-        return jsonify({'students': student_table})
-    
-    # @app.route("/")
-    # @app.route('/', defaults={'path': ''}, methods=('GET', 'POST'))
-    # @app.route('/<path:path>', methods=('GET', 'POST'))
-    # def hello_world(path):
-    #     if request.method == 'POST':
-    #         print("print it is")
-    #         return app.send_static_file("base.html")
-    
-    # @app.route('/api/data')
-    # def get_dynamic_data():
-    #     # Simulate dynamic data or fetch it from a database
-    #     return jsonify({"status": "healthy"})
-    
-    # @app.route("/heartbeat")
-    # def heartbeat():
-    #     return jsonify({"status": "healthy"})
         
 
     print("hiya!")
