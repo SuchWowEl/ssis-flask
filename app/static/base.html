@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<title>
+  awaw
+</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+  integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<nav class="navbar navbar-expand navbar-light bg-light">
+  <ul class="nav navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link active" href="#" aria-current="page"
+        >Nav 1 <span class="visually-hidden">(current)</span></a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Nav 2</a>
+    </li>
+  </ul>
+</nav>
+{% comment %}
+<nav>
+  <h1>Flaskr</h1>
+  <ul>
+    <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+    <!-- <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+
+    <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+    <li>
+      <a href="{{ url_for('auth.login') }}">Log In</a>
+    </li> -->
+  </ul>
+</nav>
+<section>
+  helloe
+  <br>
+  <button id="buttoners" class="btn-primary">Click me</button>
+  <div id="content"></div>
+</section>
+<script>
+  $(document).ready(function () {
+      $('#buttoners').click(function () {
+        $.ajax({
+          type: 'GET',
+          url: '/students',
+          success: function (response) {
+            texty = JSON.stringify(response)
+            alert(texty);
+            $('#content').text(texty);
+        }
+        })
+      })
+  })
+</script>
