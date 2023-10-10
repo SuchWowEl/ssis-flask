@@ -7,3 +7,4 @@ __pycache__/*
 app/controller/student.py
 app/students/__pycache__/*
 app/courses/__pycache__/*
+app/colleges/__pycache__/*
