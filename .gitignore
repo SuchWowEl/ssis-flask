@@ -5,3 +5,5 @@ __pycache__/*
 .flaskenv
 .vscode/*
 app/controller/student.py
+app/students/__pycache__/*
+app/courses/__pycache__/*
