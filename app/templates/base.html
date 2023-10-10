@@ -9,22 +9,25 @@
   crossorigin="anonymous"
 />
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-<nav class="navbar navbar-expand navbar-light bg-light">
-  <ul class="nav navbar-nav">
+<nav class="w-100 bg-dark navbar navbar-expand navbar-light bg-light">
+  <ul class="nav navbar-nav m-auto text-center">
     <li class="nav-item">
-      <a class="nav-link active" href="#" aria-current="page"
-        >Nav 1 <span class="visually-hidden">(current)</span></a
+      <button id="students" class="nav-link text-white btn-tabs bg-transparent"
+        >Students</a
       >
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">Nav 2</a>
+      <button id="courses" class="nav-link text-white btn-tabs bg-transparent">Courses</a>
+    </li>
+    <li class="nav-item">
+      <button id="colleges" class="nav-link text-white btn-tabs bg-transparent">Colleges</a>
     </li>
   </ul>
 </nav>
 <section class="content">
   <header>example</header>
-  <button id="students" class="btn-tabs btn-primary">Students!</button>
-  <button id="courses" class="btn-tabs btn-warning">Courses!</button>
+  <!--<button id="students" class="btn-tabs btn-primary">Students!</button>
+  <button id="courses" class="btn-tabs btn-warning">Courses!</button>-->
   <div id="content">{{content}}</div>
 </section>
 {% include 'script.html' %}
