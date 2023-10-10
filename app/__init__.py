@@ -30,13 +30,17 @@ def create_app(test_config=None):
     # @app.route('/', defaults={'path': ''})
     # @app.route('/<path:path>', methods=('GET', 'POST'))
     # def catch_all(path):
+        # return app.send_static_file("base.html")
+        
     @app.route('/')
-    def home():
-        # return render_template("base.html")
-        return app.send_static_file("base.html")
+    def home(content=None):
+        return render_template("base.html", content=content)
     
     from .students import students
     app.register_blueprint(students.bp)
+    
+    from .courses import courses
+    app.register_blueprint(courses.bp)
     
     # from controller.student import user_bp as user_blueprint
     # app.register_blueprint(user_blueprint)
