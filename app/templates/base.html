@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <title>awaw</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+<link rel="stylesheet" />
+<!--href="{{ url_for('static', filename='style.css') }}" />-->
 <link
   rel="stylesheet"
   href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
   integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
   crossorigin="anonymous"
 />
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <nav class="navbar navbar-expand navbar-light bg-light">
   <ul class="nav navbar-nav">
     <li class="nav-item">
@@ -21,17 +23,9 @@
 </nav>
 <section class="content">
   <header>example</header>
-  <button id="buttoners" class="btn-primary">Click me</button>
-  <div id="content"></div>
+  <button id="students" class="btn-tabs btn-primary">Students!</button>
+  <button id="courses" class="btn-tabs btn-warning">Courses!</button>
+  <div id="content">{{content}}</div>
 </section>
-<script>
-  $('#buttoners"').click(function () {
-    $.ajax({
-      type: "GET",
-      url: "/students",
-      success: function (response) {
-        alert(JSON.stringify(response));
-      },
-    });
-  });
-</script>
+{% include 'script.html' %}
+<!--<script src="static/script.js"></script>-->

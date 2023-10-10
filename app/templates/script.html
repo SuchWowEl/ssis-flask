@@ -1,0 +1,17 @@
+{% block script %}
+<script>
+  $(document).ready(function () {
+    $(".btn-tabs").click(function () {
+      tab = "/" + event.target.id + "/";
+      //htmlex = "<div> this works actually uogh </div>";
+      $.ajax({
+        type: "GET",
+        url: tab,
+        success: function (response) {
+          $("#content").html("<div> " + response.table + "</div>");
+        },
+      });
+    });
+  });
+</script>
+{% endblock script %}
