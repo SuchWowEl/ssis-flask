@@ -18,5 +18,5 @@ def courses():
         course_table.insert(0, ofcourse.headers())
         print("courses retrieved")
         # course_table = json.loads(course_table)
-        return jsonify({'table': render_template("table.html", content=course_table)})
+        return render_template("course/course.html", content=course_table)
         # return jsonify({'courses': course_table})

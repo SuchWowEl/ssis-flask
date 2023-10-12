@@ -17,5 +17,5 @@ def students():
         student_table.insert(0, student_interface.headers())
         print("students retrieved")
         # student_table = json.loads(student_table)
-        return jsonify({'table': render_template("table.html", content=student_table)})
+        return render_template("student/student.html", content=student_table)
         # return jsonify({'students': student_table})

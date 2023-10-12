@@ -18,5 +18,5 @@ def colleges():
         college_table.insert(0, college_interface.headers())
         print("colleges retrieved")
         # college_table = json.loads(college_table)
-        return jsonify({'table': render_template("table.html", content=college_table)})
+        return render_template("college/college.html", content=college_table)
         # return jsonify({'colleges': college_table})
