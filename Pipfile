@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 flask-mysql = "*"
 flask-mysql-connector = "*"
-flask-bootstrap = "*"
 python-dotenv = "*"
 flask = "*"
 jinja2 = "*"

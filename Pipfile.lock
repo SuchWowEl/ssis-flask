@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "a0b522c5ecab189c0ecd8ff669e1f425f2a50d6e5e7ca40c6d9f9bfcb7caa620"
+            "sha256": "6deac659bfe392d4702d27a7fb8cfa979e70e55040d482e708f5104ddff6d69d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -18,11 +18,11 @@
     "default": {
         "blinker": {
             "hashes": [
-                "sha256:4afd3de66ef3a9f8067559fb7a1cbe555c17dcbe15971b05d1b625c3e7abe213",
-                "sha256:c3d739772abb7bc2860abf5f2ec284223d9ad5c76da018234f6f50d6f31ab1f0"
+                "sha256:152090d27c1c5c722ee7e48504b02d76502811ce02e1523553b4cf8c8b3d3a8d",
+                "sha256:296320d6c28b006eb5e32d4712202dbcdcbf5dc482da298c2f44881c43884aaa"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==1.6.2"
+            "version": "==1.6.3"
         },
         "click": {
             "hashes": [
@@ -40,14 +40,6 @@
             "markers": "platform_system == 'Windows'",
             "version": "==0.4.6"
         },
-        "dominate": {
-            "hashes": [
-                "sha256:1a916479c45b95fedba0d077b081d77c2d2e0f0f484ac827105087af23661d73",
-                "sha256:4c90c3befaf88e612b71f4b39af7bcbef8977acfa855cec957225a8fbf504007"
-            ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
-            "version": "==2.8.0"
-        },
         "flask": {
             "hashes": [
                 "sha256:09c347a92aa7ff4a8e7f3206795f30d826654baf38b873d0744cd571ca609efc",
@@ -56,13 +48,6 @@
             "index": "pypi",
             "markers": "python_version >= '3.8'",
             "version": "==2.3.3"
-        },
-        "flask-bootstrap": {
-            "hashes": [
-                "sha256:cb08ed940183f6343a64e465e83b3a3f13c53e1baabb8d72b5da4545ef123ac8"
-            ],
-            "index": "pypi",
-            "version": "==3.3.7.1"
         },
         "flask-mysql": {
             "hashes": [
@@ -336,12 +321,6 @@
             "markers": "python_version >= '2'",
             "version": "==2023.3"
         },
-        "visitor": {
-            "hashes": [
-                "sha256:2c737903b2b6864ebc6167eef7cf3b997126f1aa94bdf590f90f1436d23e480a"
-            ],
-            "version": "==0.1.3"
-        },
         "werkzeug": {
             "hashes": [
                 "sha256:2b8c0e447b4b9dbcc85dd97b6eeb4dcbaf6c8b6c3be0bd654e25553e0a2157d8",
@@ -353,11 +332,11 @@
         },
         "wtforms": {
             "hashes": [
-                "sha256:6b351bbb12dd58af57ffef05bc78425d08d1914e0fd68ee14143b7ade023c5bc",
-                "sha256:837f2f0e0ca79481b92884962b914eba4e72b7a2daaf1f939c890ed0124b834b"
+                "sha256:4edd15771630289a5fa343d58822f72749822ca5a39dd33f92ee917cf72b954b",
+                "sha256:addd7899004fdf9318eb711d33aae9c1973fe80378257b7383e06de2eff7c559"
             ],
-            "markers": "python_version >= '3.7'",
-            "version": "==3.0.1"
+            "markers": "python_version >= '3.8'",
+            "version": "==3.1.0"
         }
     },
     "develop": {}
