@@ -42,6 +42,9 @@ def create_app(test_config=None):
     from .courses import courses
     app.register_blueprint(courses.bp)
     
+    from .colleges import colleges
+    app.register_blueprint(colleges.bp)
+    
     # from controller.student import user_bp as user_blueprint
     # app.register_blueprint(user_blueprint)
         

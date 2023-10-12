@@ -2,6 +2,14 @@
 <script>
   $(document).ready(function () {
     $(".btn-tabs").click(function () {
+      ["students", "courses", "colleges"].forEach(function (element) {
+        $("#" + element)
+          .removeClass("border-white")
+          .addClass("border-transparent");
+      });
+      $("#" + event.target.id)
+        .addClass("border-white")
+        .removeClass("border-transparent");
       tab = "/" + event.target.id + "/";
       //htmlex = "<div> this works actually uogh </div>";
       $.ajax({

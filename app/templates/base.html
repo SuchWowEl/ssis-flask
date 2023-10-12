@@ -1,34 +1,52 @@
 <!DOCTYPE html>
-<title>awaw</title>
-<link rel="stylesheet" />
+<title>SSIS</title>
+  <link rel="stylesheet" />
+  <!--<link href="{{url_for('static',filename='css/output.css')}}" rel="stylesheet">-->
+
+    <!-- Roboto font -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&display=swap"
+    rel="stylesheet" />
+
+  <!-- Tailwind Elements styles-->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/tw-elements.min.css" />
+
+  <!-- Tailwind CSS config-->
+  <script src="https://cdn.tailwindcss.com/3.3.3"></script> 
 <!--href="{{ url_for('static', filename='style.css') }}" />-->
 <link
   rel="stylesheet"
   href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
   integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
-  crossorigin="anonymous"
+  crossorigin="anonymous" 
 />
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-<nav class="w-100 bg-dark navbar navbar-expand navbar-light bg-light">
-  <ul class="nav navbar-nav m-auto text-center">
-    <li class="nav-item">
-      <button id="students" class="nav-link text-white btn-tabs bg-transparent"
-        >Students</a
-      >
-    </li>
-    <li class="nav-item">
-      <button id="courses" class="nav-link text-white btn-tabs bg-transparent">Courses</a>
-    </li>
-    <li class="nav-item">
-      <button id="colleges" class="nav-link text-white btn-tabs bg-transparent">Colleges</a>
-    </li>
-  </ul>
-</nav>
-<section class="content">
-  <header>example</header>
-  <!--<button id="students" class="btn-tabs btn-primary">Students!</button>
-  <button id="courses" class="btn-tabs btn-warning">Courses!</button>-->
-  <div id="content">{{content}}</div>
-</section>
+<body class="w-full h-full bg-gray-500">
+  <nav class="w-full bg-dark navbar flex flex-col p-0">
+    <div class="flex-auto text-9xl flex font-sans text-white font-weight-bold items-end">
+      <div>SSIS</div>
+      <a class="h-fit font-weight-normal text-base text-[#FAB15D]" href="https://github.com/SuchWowEl/ssis-flask">by Elizer</a>
+    </div>
+    <div class="flex-auto mb-0"> 
+      <ul class="flex-row nav navbar-nav m-auto text-center">
+        <li class="mx-2 nav-item">
+          <button id="students" class="nav-link text-white btn-tabs border-transparent border-b-2">Students</a
+          >
+        </li>
+        <li class="border-transparent border-b-2 mx-2 nav-item">
+          <button id="courses" class="nav-link text-white btn-tabs border-transparent border-b-2">Courses</a>
+        </li>
+        <li class="border-transparent border-b-2 mx-2 nav-item">
+          <button id="colleges" class="nav-link text-white btn-tabs border-transparent border-b-2">Colleges</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <section class="content">
+    <header>example</header>
+    <div id="content">{{content}}</div>
+  </section>
+</body>
 {% include 'script.html' %}
-<!--<script src="static/script.js"></script>-->
