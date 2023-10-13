@@ -1,1 +1,39 @@
-<div>{{ content }}</div>
+{% block table %}
+<div class="overflow-auto h-4/6 w-3/4 m-auto">
+  <table class="table-auto bg-gray-100 w-full m-auto">
+    <thead class="sticky top-0">
+      <tr class="bg-black w-full text-white">
+        {% for col in content[0] %}
+        <th scope="col" class="border-top-0 py-2">{{col}}</th>
+        {%endfor%}
+        <th scope="col" class="py-2 border-top-0">actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in content %} {% if not loop.first %}
+      <tr class="border-t-2 border-gray-300">
+        {% for entries in row %}
+        <td
+          class="text-center py-2 {{ 'bg-gray-200' if loop.index is even else 'bg-gray-100' }}"
+        >
+          {{ entries }}
+        </td>
+        {%endfor%}
+        <td
+          class="items-center text-center h-full  {{'bg-gray-200' if content[0]|length % 2 == 1}}"
+        >
+          <button
+            href=""
+            class="bg-yellow-400 hover:bg-yellow-400/90 text-gray-800 hover:text-blue-700 h-full w-1/2 rounded-md"
+            data-toggle="modal"
+            data-target="#editStudentModal"
+          >
+            Edit
+          </button>
+        </td>
+      </tr>
+      {%endif%} {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
