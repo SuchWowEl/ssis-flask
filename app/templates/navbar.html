@@ -1,7 +1,7 @@
 {% block navbar %}
-<nav class="w-full h-full border-b-0 bg-dark navbar flex flex-col p-0">
+<nav class="w-full h-full border-b-0 bg-dark flex flex-col p-0">
   <div
-    class="flex-auto text-9xl flex font-sans text-white font-weight-bold items-end"
+    class="flex-auto text-9xl flex text-white font-weight-bold items-end m-auto"
   >
     <div>SSIS</div>
     <a
@@ -10,17 +10,17 @@
       >by Elizer</a
     >
   </div>
-  <div class="flex-auto mb-0">
-    <ul class="flex-row flex text-center justify-evenly">
-      <li class="border-transparent border-b-2 mx-2 nav-item">
+  <div class="flex-auto mb-0 mt-2 border-y-2 border-zinc-800">
+    <ul class="flex-row flex text-center justify-evenly pt-2">
+      <li class="border-transparent border-b-2 mx-2">
         <button
           id="students"
-          class="nav-link text-white btn-tabs border-transparent border-b-2"
+          class="text-white btn-tabs border-transparent border-b-2"
         >
           Students
         </button>
       </li>
-      <li class="border-transparent border-b-2 mx-2 nav-item">
+      <li class="border-transparent border-b-2 mx-2">
         <button
           id="courses"
           class="nav-link text-white btn-tabs border-transparent border-b-2"
@@ -28,7 +28,7 @@
           Courses
         </button>
       </li>
-      <li class="border-transparent border-b-2 mx-2 nav-item">
+      <li class="border-transparent border-b-2 mx-2">
         <button
           id="colleges"
           class="nav-link text-white btn-tabs border-transparent border-b-2"
@@ -45,11 +45,11 @@
     $(".btn-tabs").click(function () {
       ["students", "courses", "colleges"].forEach(function (element) {
         $("#" + element)
-          .removeClass("border-white")
+          .removeClass("border-lime-400")
           .addClass("border-transparent");
       });
       $("#" + event.target.id)
-        .addClass("border-white")
+        .addClass("border-lime-400")
         .removeClass("border-transparent");
       tab = "/" + event.target.id + "/";
       //htmlex = "<div> this works actually uogh </div>";
