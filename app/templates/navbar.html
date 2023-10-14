@@ -41,27 +41,59 @@
 </nav>
 
 <script>
-  $(document).ready(function () {
-    $(".btn-tabs").click(function () {
-      ["students", "courses", "colleges"].forEach(function (element) {
-        $("#" + element)
-          .removeClass("border-lime-400")
-          .addClass("border-transparent");
-      });
-      $("#" + event.target.id)
-        .addClass("border-lime-400")
-        .removeClass("border-transparent");
-      tab = "/" + event.target.id + "/";
-      //htmlex = "<div> this works actually uogh </div>";
-      $("#content").load(tab);
-      /*$.ajax({
+  //$(document).ready();
+
+  $(".btn-tabs").click(function () {
+    console.log("asdad");
+    ["students", "courses", "colleges"].forEach(function (element) {
+      $("#" + element)
+        .removeClass("border-lime-400")
+        .addClass("border-transparent");
+    });
+    $("#" + event.target.id)
+      .addClass("border-lime-400")
+      .removeClass("border-transparent");
+    tab = "/" + event.target.id + "/";
+    $("#content").load(tab, function (response, status, xhr) {
+      if (status == "success") {
+        $(document).on("click", function (event) {
+          if (
+            !["dropdown-blocks", "dropdown-button"].includes(event.target.id)
+          ) {
+            $("#dropdown-blocks").addClass("hidden");
+            $("#dropdown-blocks").removeClass("block");
+          }
+        });
+        $("#dropdown-blocks").on("click", function (event) {
+          console.log(event.target.innerHtml);
+          $("#dropdown-button")
+            .contents()
+            .filter(function () {
+              return this.nodeType === 3; // Filter text nodes
+            })
+            .first()
+            .replaceWith($(event.target).text());
+          //event.stopPropagation();
+        });
+        $("#dropdown-button").click(function () {
+          console.log("dropdown pressed");
+          if ($("#dropdown-blocks").hasClass("hidden")) {
+            $("#dropdown-blocks").addClass("block");
+            $("#dropdown-blocks").removeClass("hidden");
+          } else {
+            $("#dropdown-blocks").addClass("hidden");
+            $("#dropdown-blocks").removeClass("block");
+          }
+        });
+      }
+    });
+    /*$.ajax({
         type: "GET",
         url: tab,
         success: function (response) {
           $("#content").html("<div> " + response.table + "</div>");
         },
       });*/
-    });
   });
 </script>
 {% endblock navbar %}
