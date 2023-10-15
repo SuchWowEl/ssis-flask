@@ -65,14 +65,16 @@
           }
         });
         $("#dropdown-blocks").on("click", function (event) {
-          console.log(event.target.innerHtml);
-          $("#dropdown-button")
-            .contents()
-            .filter(function () {
-              return this.nodeType === 3; // Filter text nodes
-            })
-            .first()
-            .replaceWith($(event.target).text());
+          console.log(event.target.tagName);
+          if (event.target.tagName == "BUTTON") {
+            $("#dropdown-button")
+              .contents()
+              .filter(function () {
+                return this.nodeType === 3; // Filter text nodes
+              })
+              .first()
+              .replaceWith($(event.target).text());
+          }
           //event.stopPropagation();
         });
         $("#dropdown-button").click(function () {
