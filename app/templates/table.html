@@ -3,6 +3,14 @@
   <table class="table-auto bg-gray-100 w-full m-auto">
     <thead class="sticky top-0">
       <tr class="bg-black w-full text-white">
+        <th scope="col" class="py-2 border-top-0">
+          <input
+            id="header-checkbox"
+            type="checkbox"
+            value=""
+            class="w-4 h-4 text-slate-400 bg-gray-100 border-2 rounded focus:ring-slate-400 focus:ring-2"
+          />
+        </th>
         {% for col in content[0] %}
         <th scope="col" class="capitalize border-top-0 py-2">{{col}}</th>
         {%endfor%}
@@ -12,6 +20,13 @@
     <tbody>
       {% for row in content %} {% if not loop.first %}
       <tr class="border-t-2 border-gray-300">
+        <td class="text-center py-2 bg-gray-200">
+          <input
+            type="checkbox"
+            value=""
+            class="row-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+          />
+        </td>
         {% for entries in row %}
         <td
           class="text-center py-2 {{ 'bg-gray-200' if loop.index is even else 'bg-gray-100' }}"
