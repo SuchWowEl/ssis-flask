@@ -36,6 +36,16 @@
           Colleges
         </button>
       </li>
+      <li class="hidden border-transparent border-b-2 mx-2">
+        <button
+          data-modal-target="info-popup"
+          data-modal-toggle="info-popup"
+          id="colleges"
+          class="nav-link text-white btn-tabs border-transparent border-b-2"
+        >
+          OPEN
+        </button>
+      </li>
     </ul>
   </div>
 </nav>
@@ -111,22 +121,17 @@
   }
 
   function toggleRow(event) {
-    console.log(event);
     id = event.target
       .closest("tr")
       .querySelectorAll("td")[1]
       .textContent.trim();
-    console.log(id);
-    console.log(selectedStudent);
     if (selectedStudent.includes(id)) {
-      console.log("selecting...");
       for (index in [0, 1, 2, 3, 4, 5, 6, 7]) {
         id = event.target.closest("tr").querySelectorAll("td")[index];
         id.classList.add("bg-gray-300", "text-slate-600");
         id.classList.remove("bg-gray-200", "bg-gray-100");
       }
     } else {
-      console.log("unselecting...");
       for (index in [0, 1, 2, 3, 4, 5, 6, 7]) {
         id = event.target.closest("tr").querySelectorAll("td")[index];
         id.classList.remove("bg-gray-300", "text-slate-600");
@@ -139,23 +144,19 @@
     const table = document.getElementById("table-form"); // Get the table by its ID
     const rows = table.getElementsByTagName("tr");
     if (selectedStudent.length > 0) {
-      console.log("selecting...");
       for (let i = 0; i < rows.length; i++) {
         const cells = rows[i].getElementsByTagName("td");
 
         for (let j = 0; j < cells.length; j++) {
-          console.log(`Row ${i + 1}, Cell ${j + 1}: ${cells[j].textContent}`);
           cells[j].classList.add("bg-gray-300", "text-slate-600");
           cells[j].classList.remove(j % 2 ? "bg-gray-100" : "bg-gray-200");
         }
       }
     } else {
-      console.log("unselecting...");
       for (let i = 0; i < rows.length; i++) {
         const cells = rows[i].getElementsByTagName("td");
 
         for (let j = 0; j < cells.length; j++) {
-          console.log(`Row ${i + 1}, Cell ${j + 1}: ${cells[j].textContent}`);
           cells[j].classList.remove("bg-gray-300", "text-slate-600");
           cells[j].classList.add(j % 2 ? "bg-gray-100" : "bg-gray-200");
         }
@@ -166,7 +167,6 @@
   function allCheckbox(event) {
     ifAllChecked = event.target.checked ? true : false;
     document.querySelectorAll(".row-checkbox").forEach(function (tab) {
-      console.log(tab);
       tab.checked = ifAllChecked;
       if (
         ifAllChecked &&
@@ -241,6 +241,55 @@
     //bg-red-400 border-red-400
   }
 
+  function closingDeleteDialog() {
+    console.log("CLOSING DIALOG");
+    const divToDelete = document.querySelector("[modal-backdrop]");
+    document.getElementById("info-popup").classList.add("hidden");
+    divToDelete.remove();
+  }
+
+  function deleteStudentDialog() {
+    console.log("deleteStudentDialog called");
+    dialog = document.getElementById("info-popup");
+    dialog.classList.remove("hidden");
+    dialog.classList.add("flex");
+    dialog.setAttribute("role", "dialog");
+    dialog.setAttribute("aria-modal", "true");
+
+    const newDiv = document.createElement("div");
+
+    // Customize the new div (e.g., add content, classes, styles)
+    newDiv.setAttribute("modal-backdrop", "");
+    newDiv.className =
+      "bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40";
+
+    // Append the new div to the body of the document
+    document.body.appendChild(newDiv);
+  }
+
+  function deleteStudentCall() {
+    console.log("tab @ deleteStudentCall:" + tableUrl);
+    deleteUrl = tableUrl + "delete";
+    var csrf_token = "{{ csrf_token() }}";
+    var formData = {
+      list: selectedStudent,
+    };
+    console.log("formData is " + JSON.stringify(formData, null, 2));
+    const request = new XMLHttpRequest();
+    request.open("POST", deleteUrl);
+    request.onload = function () {
+      document.getElementById("content").innerHTML = this.responseText;
+      addEntry("edit");
+    };
+    request.setRequestHeader("Content-type", "application/json");
+    const csrfToken = document
+      .querySelector("meta[name=csrf-token]")
+      .getAttribute("content");
+    request.setRequestHeader("X-CSRFToken", csrfToken);
+    request.send(JSON.stringify(formData));
+    event.preventDefault();
+  }
+
   function tablePick() {
     console.log("tablePick function executed");
 
@@ -264,6 +313,28 @@
     document
       .getElementById("dropdown-blocks")
       .addEventListener("click", dropdownBlocksClickHandler);
+
+    document
+      .getElementById("delete_button")
+      .addEventListener("click", deleteStudentDialog);
+
+    document
+      .getElementById("delete_button")
+      .setAttribute("data-modal-target", "info-popup");
+    document
+      .getElementById("delete_button")
+      .setAttribute("data-modal-toggle", "info-popup");
+
+    document
+      .getElementById("proceed-to-delete")
+      .addEventListener("click", deleteStudentCall);
+
+    document
+      .querySelectorAll(".remove-custom-backdrop")
+      .forEach(function (tab) {
+        if ($(this).attr("id") != "proceed-to-delete")
+          tab.addEventListener("click", closingDeleteDialog);
+      });
 
     document.getElementById("add_entry").addEventListener("click", function () {
       var addUrl = tableUrl + "/add/";
@@ -386,6 +457,10 @@
   // Add event listeners to .btn-tabs elements
   document.querySelectorAll(".btn-tabs").forEach(function (tab) {
     tab.addEventListener("click", handleTabClick);
+  });
+
+  $(document).ready(function () {
+    document.getElementById("students").click();
   });
 </script>
 {% endblock navbar %}

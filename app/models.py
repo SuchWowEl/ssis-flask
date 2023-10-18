@@ -1,4 +1,5 @@
 from app import mysql
+import numpy
 
 
 class Student:
@@ -77,6 +78,18 @@ class Student:
             values.append(inner_tuple[0])
         tuplevar = tuple(values)
         return tuplevar
+        
+    def delete_rows(self, id_to_delete):
+        # id_to_delete = ["John Doe", "Jane Doe"]
+        cursor = mysql.connection.cursor()
+        if not isinstance(id_to_delete, (list, tuple, numpy.ndarray)):
+            id_to_delete = [id_to_delete]
+        placeholders = ",".join(["%s"] * len(id_to_delete))
+        sql = "DELETE FROM student WHERE `id` IN ({})".format(
+            placeholders)
+        # sql2 = " IN ({})".format(placeholders)
+        cursor.execute(sql, tuple(id_to_delete))
+        mysql.connection.commit()
 
     # @classmethod
     def delete(self,id):    
