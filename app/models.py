@@ -9,26 +9,50 @@ class Student:
     #     self.password = password
     #     self.email = email
     
-    # student_info is list
+    def retrieve_student(self, id):
+        cursor = mysql.connection.cursor()
+        print("a student triggered")
+
+        sql = f"SELECT * from student where (`id` = '{id}')"
+        cursor.execute(sql)
+        result = cursor.fetchone() 
+        print("retreived student from model:")
+        print(result)
+        values = []
+        for inner_tuple in result:
+            values.append(inner_tuple)
+        print("retreived tuplevar from model:")
+        print(values)
+        return values
+        
+    
+    # student_info is dict
     def add(self, student_info):
         cursor = mysql.connection.cursor()
+        
+        print(student_info)
 
         sql = f"INSERT INTO `student` (`id`, `firstname`, `lastname`, `course`, `year`, `gender`) \
-       VALUES ('{student_info[0]}', '{student_info[1]}', '{student_info[2]}', '{student_info[3]}', \
-               '{student_info[4]}', '{student_info[5]}')"
+       VALUES ('{student_info['id']}', '{student_info['firstname']}', '{student_info['lastname']}', '{student_info['course']}', \
+               '{student_info['year']}', '{student_info['gender']}')"
 
         cursor.execute(sql)
         mysql.connection.commit()
         
-    def update(self, column, newvalue, id):
+    # student_info is dict
+    def update(self, student_info, studentID):
         cursor = mysql.connection.cursor()
         
-        # UPDATE `ssis`.`student` SET `firstname` = 'asda' WHERE (`id` = '2021-0001');
-        sql = f"UPDATE `ssis`.`student` SET `{column}` = '{newvalue}' \
-                WHERE (`id` = '{id}')" 
+        sql = f"UPDATE `student` \
+                SET `id` = '{student_info['id']}', `firstname` = '{student_info['firstname']}', `lastname` = '{student_info['lastname']}', \
+                `course` = '{student_info['course']}', `year` = {student_info['year']}, `gender` = '{student_info['gender']}' \
+                WHERE `id` = '{studentID}'"
+                
+        print(sql)
 
         cursor.execute(sql)
         mysql.connection.commit()
+        
     # @classmethod
     def all(self):
         cursor = mysql.connection.cursor()
@@ -97,6 +121,15 @@ class Course:
         cursor = mysql.connection.cursor()
 
         sql = "SELECT * from course"
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        return result
+    
+    # @classmethod
+    def coursecodes(self):
+        cursor = mysql.connection.cursor()
+
+        sql = "SELECT code from course"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
