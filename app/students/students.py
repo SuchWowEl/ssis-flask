@@ -64,3 +64,12 @@ def students_edit():
     # print("students retrieved")
     # return render_template("student/student.html", content=student_table)
         # return jsonify({'courses': course_table})
+        
+@bp.route('/students/delete/', methods=['POST'])
+def students_delete():
+    data = request.get_json()
+    print(data)
+    list = data["list"]
+    print("list is " + str(list))
+    student_interface.delete_rows(list)
+    return redirect(url_for("students.students"))
