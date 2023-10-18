@@ -64,6 +64,18 @@ class Student:
         result = cursor.fetchall()
         return result
     
+    # @classmethod
+    def search(self, header, value):
+        cursor = mysql.connection.cursor()
+        print("students triggered")
+
+        sql = f"SELECT * \
+            FROM student \
+            WHERE {header} LIKE '%{value}%';"
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        return result
+    
     def headers(self):
         cursor = mysql.connection.cursor()
         sql = "SELECT COLUMN_NAME \

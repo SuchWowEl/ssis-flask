@@ -73,3 +73,19 @@ def students_delete():
     print("list is " + str(list))
     student_interface.delete_rows(list)
     return redirect(url_for("students.students"))
+
+@bp.route('/students/search/', methods=['POST'])
+def students_search():
+    # data = request.get_json()
+    data = request.get_json()
+    print("data:")
+    print(data)
+    student_table = ""
+    if(data["search"] != ""):
+        student_table = student_interface.search(data["header"], data["search"])
+        student_table.insert(0, student_interface.headers())
+    else:
+        student_table = student_interface.all()
+        student_table.insert(0, student_interface.headers())
+    print("students retrieved")
+    return render_template("table.html", content=student_table)
