@@ -33,8 +33,8 @@ def create_app(test_config=None):
         # return app.send_static_file("base.html")
         
     @app.route('/')
-    def home(content=None):
-        return render_template("base.html", content=content)
+    def home():
+        return render_template("base.html")
     
     from .students import students
     app.register_blueprint(students.bp)
