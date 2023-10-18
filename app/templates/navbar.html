@@ -43,6 +43,7 @@
 <script>
   //$(document).ready();
   tableUrl = "";
+  let selectedStudent = [];
 
   // Function to toggle the visibility of dropdown-blocks
   function toggleDropdown() {
@@ -109,6 +110,137 @@
     xhr.send();
   }
 
+  function toggleRow(event) {
+    console.log(event);
+    id = event.target
+      .closest("tr")
+      .querySelectorAll("td")[1]
+      .textContent.trim();
+    console.log(id);
+    console.log(selectedStudent);
+    if (selectedStudent.includes(id)) {
+      console.log("selecting...");
+      for (index in [0, 1, 2, 3, 4, 5, 6, 7]) {
+        id = event.target.closest("tr").querySelectorAll("td")[index];
+        id.classList.add("bg-gray-300", "text-slate-600");
+        id.classList.remove("bg-gray-200", "bg-gray-100");
+      }
+    } else {
+      console.log("unselecting...");
+      for (index in [0, 1, 2, 3, 4, 5, 6, 7]) {
+        id = event.target.closest("tr").querySelectorAll("td")[index];
+        id.classList.remove("bg-gray-300", "text-slate-600");
+        id.classList.add(index % 2 ? "bg-gray-100" : "bg-gray-200");
+      }
+    }
+  }
+
+  function toggleAllRow() {
+    const table = document.getElementById("table-form"); // Get the table by its ID
+    const rows = table.getElementsByTagName("tr");
+    if (selectedStudent.length > 0) {
+      console.log("selecting...");
+      for (let i = 0; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName("td");
+
+        for (let j = 0; j < cells.length; j++) {
+          console.log(`Row ${i + 1}, Cell ${j + 1}: ${cells[j].textContent}`);
+          cells[j].classList.add("bg-gray-300", "text-slate-600");
+          cells[j].classList.remove(j % 2 ? "bg-gray-100" : "bg-gray-200");
+        }
+      }
+    } else {
+      console.log("unselecting...");
+      for (let i = 0; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName("td");
+
+        for (let j = 0; j < cells.length; j++) {
+          console.log(`Row ${i + 1}, Cell ${j + 1}: ${cells[j].textContent}`);
+          cells[j].classList.remove("bg-gray-300", "text-slate-600");
+          cells[j].classList.add(j % 2 ? "bg-gray-100" : "bg-gray-200");
+        }
+      }
+    }
+  }
+
+  function allCheckbox(event) {
+    ifAllChecked = event.target.checked ? true : false;
+    document.querySelectorAll(".row-checkbox").forEach(function (tab) {
+      console.log(tab);
+      tab.checked = ifAllChecked;
+      if (
+        ifAllChecked &&
+        selectedStudent.indexOf(
+          tab.closest("tr").querySelectorAll("td")[1].textContent.trim()
+        )
+      ) {
+        selectedStudent.push(
+          tab.closest("tr").querySelectorAll("td")[1].textContent.trim()
+        );
+      }
+    });
+    if (!ifAllChecked) selectedStudent = [];
+    toggleAllRow();
+    toggleDelete();
+  }
+
+  function toggleCheckBox(event) {
+    const id = event.target
+      .closest("tr")
+      .querySelectorAll("td")[1]
+      .textContent.trim();
+    const index = selectedStudent.indexOf(id);
+    if (index === -1) {
+      selectedStudent.push(id);
+    } else {
+      selectedStudent.splice(index, 1);
+    }
+    toggleDelete();
+    toggleRow(event);
+  }
+
+  function toggleDelete() {
+    console.log("toggleDelete");
+    const item = document.getElementById("delete_button");
+    if (selectedStudent.length > 0) {
+      item.disabled = false;
+      item.classList.add(
+        "bg-red-700",
+        "border-red-700",
+        "hover:bg-red-800",
+        "focus:ring-4",
+        "focus:outline-none",
+        "focus:ring-red-300",
+        "text-white"
+      );
+      item.classList.remove(
+        "text-gray-200",
+        "cursor-not-allowed",
+        "bg-red-300",
+        "border-red-300"
+      );
+    } else {
+      item.disabled = true;
+      item.classList.remove(
+        "bg-red-700",
+        "border-red-700",
+        "hover:bg-red-800",
+        "focus:ring-4",
+        "focus:outline-none",
+        "focus:ring-red-300",
+        "text-white"
+      );
+      item.classList.add(
+        "text-gray-200",
+        "cursor-not-allowed",
+        "bg-red-300",
+        "border-red-300"
+      );
+    }
+    //bg-red-700 border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300
+    //bg-red-400 border-red-400
+  }
+
   function tablePick() {
     console.log("tablePick function executed");
 
@@ -118,6 +250,16 @@
       .addEventListener("click", toggleDropdown);
 
     document.addEventListener("click", documentClickHandler);
+
+    document
+      .getElementById("header-checkbox")
+      .addEventListener("click", allCheckbox);
+
+    const checkboxes = document.getElementsByClassName("row-checkbox");
+
+    for (let i = 0; i < checkboxes.length; i++) {
+      checkboxes[i].addEventListener("click", toggleCheckBox);
+    }
 
     document
       .getElementById("dropdown-blocks")
@@ -153,7 +295,7 @@
 
         const leftmostData = event.target
           .closest("tr")
-          .querySelector("td")
+          .querySelectorAll("td")[1]
           .textContent.trim();
         console.log("leftmostData:");
         console.log(leftmostData);
