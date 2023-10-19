@@ -1,7 +1,7 @@
 {% block table %}
 <div class="h-1/6 w-full m-auto flex flex-col">
   <div class="flex-1 h-fit flex-row flex w-9/12 mx-auto">
-    <form class="w-5/6 mx-auto self-center h-2/4">
+    <form id="searchbar-form" class="w-5/6 mx-auto self-center h-2/4">
       <div class="flex relative">
         <button
           onclick="toggleDropdown"
@@ -68,7 +68,6 @@
             id="search-dropdown"
             class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
             placeholder="Search..."
-            required
           />
           <div class="absolute top-0 right-0 flex flex-row h-full">
             <button
@@ -95,6 +94,8 @@
           </div>
         </div>
       </div>
+
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
     </form>
 
     <div class="relative ml-2 h-2/4 flex flex-row self-center w-3/12">
