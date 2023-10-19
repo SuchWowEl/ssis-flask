@@ -1,8 +1,7 @@
 
-
   //$(document).ready();
   tableUrl = "";
-  search_filter = "";
+search_filter = "";
   let selectedStudent = [];
 
   // Function to toggle the visibility of dropdown-blocks
@@ -20,7 +19,7 @@
   // Function to handle clicks on the document
   function documentClickHandler(event) {
     var dropdownBlocks = document.getElementById("dropdown-blocks");
-
+    
     if (
       event.target.id !== "dropdown-blocks" &&
       event.target.id !== "dropdown-button"
@@ -40,9 +39,9 @@
         return node.nodeType === 3; // Filter text nodes
       });
       textNode.replaceWith(event.target.textContent);
-      search_filter = event.target.textContent.trim();
+search_filter = event.target.textContent.trim();
     }
-    console.log("search_filter");
+console.log("search_filter");
     console.log(search_filter);
   }
 
@@ -61,10 +60,10 @@
     console.log(tableUrl);
     tableUrl = "/" + event.target.id + "/";
     var content = document.getElementById("content");
-    search_filter = "";
+search_filter = "";
 
     // Perform an AJAX load operation (you may need to use another approach like fetch or XMLHttpRequest)
-    fetch(tableUrl)
+fetch(tableUrl)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Network response was not ok: ${response.status}`);
@@ -97,11 +96,11 @@
       search: document.getElementById("search-dropdown").value
     };
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", searchUrl, true);
+xhr.open("POST", searchUrl, true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.setRequestHeader("X-CSRFToken", csrfToken);
     xhr.onload = function () {
-        document.getElementById("table-div").innerHTML = xhr.responseText;
+      document.getElementById("table-div").innerHTML = xhr.responseText;
     };
     xhr.send(JSON.stringify(formData));
     event.preventDefault();
@@ -130,13 +129,13 @@
     if (selectedStudent.includes(id)) {
       for (index in [0, 1, 2, 3, 4, 5, 6, 7]) {
         id = event.target.closest("tr").querySelectorAll("td")[index];
-        id.classList.add("bg-gray-400", "text-blue-600");
+        id.classList.add("bg-gray-400", "text-white");
         id.classList.remove("bg-gray-200", "bg-gray-100");
       }
     } else {
       for (index in [0, 1, 2, 3, 4, 5, 6, 7]) {
         id = event.target.closest("tr").querySelectorAll("td")[index];
-        id.classList.remove("bg-gray-400", "text-blue-600");
+        id.classList.remove("bg-gray-400", "text-white");
         id.classList.add(index % 2 ? "bg-gray-100" : "bg-gray-200");
       }
     }
@@ -150,7 +149,7 @@
         const cells = rows[i].getElementsByTagName("td");
 
         for (let j = 0; j < cells.length; j++) {
-          cells[j].classList.add("bg-gray-400", "text-blue-600");
+          cells[j].classList.add("bg-gray-400", "text-white");
           cells[j].classList.remove(j % 2 ? "bg-gray-100" : "bg-gray-200");
         }
       }
@@ -159,7 +158,7 @@
         const cells = rows[i].getElementsByTagName("td");
 
         for (let j = 0; j < cells.length; j++) {
-          cells[j].classList.remove("bg-gray-400", "text-blue-600");
+          cells[j].classList.remove("bg-gray-400", "text-white");
           cells[j].classList.add(j % 2 ? "bg-gray-100" : "bg-gray-200");
         }
       }
@@ -272,7 +271,7 @@
   function deleteStudentCall() {
     console.log("tab @ deleteStudentCall:" + tableUrl);
     deleteUrl = tableUrl + "delete";
-    const csrfToken = document
+        const csrfToken = document
       .querySelector("meta[name=csrf-token]")
       .getAttribute("content");
     const formData = {
@@ -332,7 +331,7 @@
     document
       .getElementById("delete_button")
       .addEventListener("click", deleteStudentDialog);
-    document
+document
       .getElementById("searchbar-form")
       .addEventListener("submit", searchTable);
 
@@ -358,21 +357,24 @@
       var addUrl = tableUrl + "/add/";
       var content = document.getElementById("content");
 
-      fetch(addUrl)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`Network response was not ok: ${response.status}`);
-          }
-          return response.text();
-        })
-        .then((data) => {
-          content.innerHTML = data;
-          addEntry("add");
-        })
-        .catch((error) => {
-          console.error("Fetch error:", error);
-        });
+      // Perform an AJAX load operation (you may need to use another approach like fetch or XMLHttpRequest)
+      var xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        content.innerHTML = this.responseText;
+        addEntry("add");
+      };
+      xhr.open("GET", addUrl, true);
+      xhr.send();
     });
+
+    // Perform an AJAX load operation (you may need to use another approach like fetch or XMLHttpRequest)
+    /*var xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        content.innerHTML = this.responseText;
+        addEntry();
+      };
+      xhr.open("GET", addUrl, true);
+      xhr.send();*/
 
     document.querySelector("table").addEventListener("click", function (event) {
       if (event.target.classList.contains("edit-btn")) {
@@ -386,36 +388,23 @@
         console.log("leftmostData:");
         console.log(leftmostData);
 
-        const csrfToken = "{{ csrf_token() }}";
-        const formData = {
+        var csrf_token = "{{ csrf_token() }}";
+        var formData = {
           id: leftmostData,
         };
         console.log("formData is " + JSON.stringify(formData, null, 2));
-
-        fetch(editUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrfToken,
-          },
-          body: JSON.stringify(formData),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(
-                `Network response was not ok: ${response.status}`
-              );
-            }
-            return response.text();
-          })
-          .then((data) => {
-            document.getElementById("content").innerHTML = data;
-            addEntry("edit");
-          })
-          .catch((error) => {
-            console.error("Fetch error:", error);
-          });
-
+        const request = new XMLHttpRequest();
+        request.open("POST", editUrl);
+        request.onload = function () {
+          document.getElementById("content").innerHTML = this.responseText;
+          addEntry("edit");
+        };
+        request.setRequestHeader("Content-type", "application/json");
+        const csrfToken = document
+          .querySelector("meta[name=csrf-token]")
+          .getAttribute("content");
+        request.setRequestHeader("X-CSRFToken", csrfToken);
+        request.send(JSON.stringify(formData));
         event.preventDefault();
       }
     });
@@ -460,38 +449,24 @@
           gender: $("#gender").val(),
         };
         console.log("formData is " + JSON.stringify(formData, null, 2));
-        fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": document
-              .querySelector("meta[name=csrf-token]")
-              .getAttribute("content"),
-          },
-          body: JSON.stringify(formData),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(
-                `Network response was not ok: ${response.status}`
-              );
-            }
-            return response.json(); // Assuming the response is in JSON format
-          })
-          .then((data) => {
-            console.log("POST SUCCESSFUL");
-            const element = document.getElementById("students");
+        const request = new XMLHttpRequest();
+        request.open("POST", url);
+        request.onload = () => {
+          console.log("POST SUCCESSFUL");
+          const element = document.getElementById("students");
 
-            // Check if the element exists (not null)
-            if (element) {
-              // Programmatically trigger a click event
-              element.click();
-            }
-          })
-          .catch((error) => {
-            console.error("Fetch error:", error);
-          });
-
+          // Check if the element exists (not null)
+          if (element) {
+            // Programmatically trigger a click event
+            element.click();
+          }
+        };
+        request.setRequestHeader("Content-type", "application/json");
+        const csrfToken = document
+          .querySelector("meta[name=csrf-token]")
+          .getAttribute("content");
+        request.setRequestHeader("X-CSRFToken", csrfToken);
+        request.send(JSON.stringify(formData));
         event.preventDefault();
       });
   }
