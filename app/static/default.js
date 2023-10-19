@@ -438,7 +438,7 @@ xhr.open("POST", searchUrl, true);
             id: leftmostData
           };
         }
-        else if(tableUrl=="/courses/"){
+        else if(tableUrl=="/courses/" || tableUrl=="/colleges/"){
           formData = {
             code: leftmostData
           };
@@ -521,13 +521,15 @@ xhr.open("POST", searchUrl, true);
             gender: $("#gender").val(),
           }
         }
-        if (tableUrl=="/courses/"){
+        else{
           formData = {
             code: $("#code").val(),
             name: $("#name").val(),
-            college: $("#formDropdownButton").contents().filter(function() {            
+          }
+          if (tableUrl=="/courses/"){
+            formData["college"] = $("#formDropdownButton").contents().filter(function() {            
                   return this.nodeType === 3; // Filter text nodes
-              }).text().trim(),
+              }).text().trim()
           }
         }
         console.log("formData is " + JSON.stringify(formData, null, 2));
