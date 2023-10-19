@@ -34,7 +34,7 @@ def students_add():
     data = request.get_json()
     print("form: " + str(data))
     student_interface.add(data)
-    return redirect(url_for("students.students"))
+    return jsonify({"ok":True})
     
 @bp.route('/students/edit/', methods=['POST'])
 def students_edit_view():

@@ -123,21 +123,41 @@ class Course:
     #     self.email = email
     
     # student_info is list
+    
+    def retrieve_course(self, code):
+        cursor = mysql.connection.cursor()
+        print("a course triggered")
+
+        sql = f"SELECT * from course where (`code` = '{code}')"
+        cursor.execute(sql)
+        result = cursor.fetchone() 
+        print("retreived course from model:")
+        print(result)
+        values = []
+        for inner_tuple in result:
+            values.append(inner_tuple)
+        print("retreived tuplevar from model:")
+        print(values)
+        return values
+    
     def add(self, course_info):
+        print(course_info)
+        print()
         cursor = mysql.connection.cursor()
 
-        sql = f"INSERT INTO `student` (`code`, `name`, `college`) \
-       VALUES ('{course_info[0]}', '{course_info[1]}', '{course_info[2]}')"
+        sql = f"INSERT INTO `course` (`code`, `name`, `college`) \
+       VALUES ('{course_info['code']}', '{course_info['name']}', '{course_info['college']}')"
 
         cursor.execute(sql)
         mysql.connection.commit()
         
-    def update(self, column, newvalue, id):
+    def update(self, course_info, courseCode):
         cursor = mysql.connection.cursor()
         
         # UPDATE `ssis`.`student` SET `firstname` = 'asda' WHERE (`id` = '2021-0001');
-        sql = f"UPDATE `course` SET `{column}` = '{newvalue}' \
-                WHERE (`id` = '{id}')" 
+        sql = f"UPDATE `course` \
+                SET `code` = '{course_info['code']}', `name` = '{course_info['name']}', `college` = '{course_info['college']}' \
+                WHERE `code` = '{courseCode}'"
 
         cursor.execute(sql)
         mysql.connection.commit()
@@ -146,6 +166,18 @@ class Course:
         cursor = mysql.connection.cursor()
 
         sql = "SELECT * from course"
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        return result
+    
+    # @classmethod
+    def search(self, header, value):
+        cursor = mysql.connection.cursor()
+        print("courses search")
+
+        sql = f"SELECT * \
+            FROM course \
+            WHERE {header} LIKE '%{value}%';"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
@@ -173,6 +205,18 @@ class Course:
             values.append(inner_tuple[0])
         tuplevar = tuple(values)
         return tuplevar
+
+    def delete_rows(self, id_to_delete):
+        # id_to_delete = ["John Doe", "Jane Doe"]
+        cursor = mysql.connection.cursor()
+        if not isinstance(id_to_delete, (list, tuple, numpy.ndarray)):
+            id_to_delete = [id_to_delete]
+        placeholders = ",".join(["%s"] * len(id_to_delete))
+        sql = "DELETE FROM course WHERE `code` IN ({})".format(
+            placeholders)
+        # sql2 = " IN ({})".format(placeholders)
+        cursor.execute(sql, tuple(id_to_delete))
+        mysql.connection.commit()
 
     # @classmethod
     def delete(self,id):    
@@ -212,6 +256,16 @@ class College:
 
         cursor.execute(sql)
         mysql.connection.commit()
+    
+    def collegecodes(self):
+        cursor = mysql.connection.cursor()
+
+        sql = "SELECT code from college"
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        return result
+        
+    
     # @classmethod
     def all(self):
         cursor = mysql.connection.cursor()

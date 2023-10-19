@@ -1,6 +1,6 @@
 
   //$(document).ready();
-  tableUrl = "";
+  tableUrl = "";// e.g. "/students/"
 search_filter = "";
   let selectedStudent = [];
 
@@ -21,11 +21,24 @@ search_filter = "";
     var dropdownBlocks = document.getElementById("dropdown-blocks");
     
     if (
+      $("#dropdown-blocks").length > 0 &&
       event.target.id !== "dropdown-blocks" &&
       event.target.id !== "dropdown-button"
     ) {
       dropdownBlocks.classList.remove("block");
       dropdownBlocks.classList.add("hidden");
+    }
+    if (tableUrl=="/courses/" && $("#formDropdownBox").length > 0){
+      var formDropdownBox = document.getElementById("formDropdownBox");
+      
+      if (
+        event.target.id !== "formDropdownBox" &&
+        event.target.id !== "formDropdownButton"
+      ) {
+        formDropdownBox.classList.remove("block");
+        formDropdownBox.classList.add("hidden");
+        document.getElementById("submit_button").classList.remove("hidden");
+      }
     }
   }
 
@@ -304,6 +317,37 @@ xhr.open("POST", searchUrl, true);
     event.preventDefault();
   }
 
+  function formDropdown(){
+    console.log("formDropdown clicked");
+    var formDropdownBlocks = document.getElementById("formDropdownBox");
+    var submit_button = document.getElementById("submit_button");
+    if (formDropdownBlocks.classList.contains("hidden")) {
+      formDropdownBlocks.classList.remove("hidden");
+      formDropdownBlocks.classList.add("block");
+      submit_button.classList.add("hidden");
+    } else {
+      formDropdownBlocks.classList.remove("block");
+      formDropdownBlocks.classList.add("hidden");
+      submit_button.classList.remove("hidden");
+    }
+  }
+
+  function formDropdownBlocksClickHandler(event) {
+    console.log("dropdown chose");
+    if (event.target.tagName === "BUTTON") {
+      console.log("valid");
+      var dropdownButton = document.getElementById("formDropdownButton");
+      var textNode = Array.from(dropdownButton.childNodes).find(function (
+        node
+      ) {
+        return node.nodeType === 3; // Filter text nodes
+      });
+      textNode.replaceWith(event.target.textContent);
+    }
+  }
+
+  
+
   function tablePick() {
     console.log("tablePick function executed");
 
@@ -331,17 +375,16 @@ xhr.open("POST", searchUrl, true);
     document
       .getElementById("delete_button")
       .addEventListener("click", deleteStudentDialog);
-document
-      .getElementById("searchbar-form")
-      .addEventListener("submit", searchTable);
-
     document
-      .getElementById("delete_button")
-      .setAttribute("data-modal-target", "info-popup");
-    document
-      .getElementById("delete_button")
-      .setAttribute("data-modal-toggle", "info-popup");
+          .getElementById("searchbar-form")
+          .addEventListener("submit", searchTable);
 
+    // document
+    //   .getElementById("delete_button")
+    //   .setAttribute("data-modal-target", "info-popup");
+    // document
+    //   .getElementById("delete_button")
+    //   .setAttribute("data-modal-toggle", "info-popup");
     document
       .getElementById("proceed-to-delete")
       .addEventListener("click", deleteStudentCall);
@@ -389,9 +432,17 @@ document
         console.log(leftmostData);
 
         var csrf_token = "{{ csrf_token() }}";
-        var formData = {
-          id: leftmostData,
-        };
+        var formData = {}
+        if(tableUrl=="/students/"){
+          formData = {
+            id: leftmostData
+          };
+        }
+        else if(tableUrl=="/courses/"){
+          formData = {
+            code: leftmostData
+          };
+        }
         console.log("formData is " + JSON.stringify(formData, null, 2));
         const request = new XMLHttpRequest();
         request.open("POST", editUrl);
@@ -411,49 +462,80 @@ document
   }
 
   function addEntry(type) {
-    url = type == "add" ? "/students/addstudent/" : "/students/editstudent/";
+    url = tableUrl+ ((type == "add") ?  "add" : "edit") +tableUrl.slice(1, -2)+"/"; 
     console.log("addEntry function executed");
 
-    const input = document.getElementById("id");
+    if($("#id").length > 0){// /students/
+      const input = document.getElementById("id");
 
-    input.addEventListener("input", function (event) {
-      const inputValue = event.target.value;
+      input.addEventListener("input", function (event) {
+        const inputValue = event.target.value;
 
-      // Remove any non-numeric characters and limit the length to 4
-      const cleanedValue = inputValue.replace(/[^\d-]/g, "");
+        // Remove any non-numeric characters and limit the length to 4
+        const cleanedValue = inputValue.replace(/[^\d-]/g, "");
 
-      event.target.value = cleanedValue;
+        event.target.value = cleanedValue;
 
-      if (cleanedValue[cleanedValue.length - 1] == "-")
-        event.target.value = cleanedValue.substring(0, cleanedValue.length - 1);
-      else if (
-        cleanedValue.length === 4 ||
-        (cleanedValue.length == 5 &&
-          cleanedValue[cleanedValue.length - 1] != "-")
-      )
-        event.target.value = cleanedValue + "-";
-    });
+        if (cleanedValue[cleanedValue.length - 1] == "-")
+          event.target.value = cleanedValue.substring(0, cleanedValue.length - 1);
+        else if (
+          cleanedValue.length === 4 ||
+          (cleanedValue.length == 5 &&
+            cleanedValue[cleanedValue.length - 1] != "-")
+        )
+          event.target.value = cleanedValue + "-";
+      });
+    }
+    if($("#formDropdownBox").length > 0){// /courses/
+      console.log("formDropdownBox exists");
+      document.addEventListener("click", function(event) {
+        // if (!document.getElementById("formDropdownBox").classList.contains("hidden")) 
+        //   formDropdown();
+      });
+
+      document
+        .getElementById("formDropdownButton")
+        .addEventListener("click", formDropdown);
+        
+      document
+        .getElementById("formDropdownBox-choices")
+        .addEventListener("click", formDropdownBlocksClickHandler);
+
+    }
+
 
     document
-      .getElementById("student-form")
+      .getElementById("add-edit-form")
       .addEventListener("submit", function (event) {
         console.log("POST");
         var csrf_token = "{{ csrf_token() }}";
 
-        var formData = {
-          id: $("#id").val(),
-          firstname: $("#firstname").val(),
-          lastname: $("#lastname").val(),
-          course: $("#course").val(),
-          year: $("#year").val(),
-          gender: $("#gender").val(),
-        };
+        var formData = {};
+        if (tableUrl=="/students/"){
+          formData = {
+            id: $("#id").val(),
+            firstname: $("#firstname").val(),
+            lastname: $("#lastname").val(),
+            course: $("#course").val(),
+            year: $("#year").val(),
+            gender: $("#gender").val(),
+          }
+        }
+        if (tableUrl=="/courses/"){
+          formData = {
+            code: $("#code").val(),
+            name: $("#name").val(),
+            college: $("#formDropdownButton").contents().filter(function() {            
+                  return this.nodeType === 3; // Filter text nodes
+              }).text().trim(),
+          }
+        }
         console.log("formData is " + JSON.stringify(formData, null, 2));
         const request = new XMLHttpRequest();
         request.open("POST", url);
         request.onload = () => {
           console.log("POST SUCCESSFUL");
-          const element = document.getElementById("students");
+          const element = document.getElementById(tableUrl.slice(1, -1));
 
           // Check if the element exists (not null)
           if (element) {
