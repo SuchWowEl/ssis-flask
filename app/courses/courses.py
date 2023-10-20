@@ -12,16 +12,16 @@ from app.models import ofcourse, college_interface
 bp = Blueprint('courses', __name__)
 
 coursecode = ""
+search_header = "Filter by..."
+search_value = ""
 
-@bp.route('/courses/', methods=['GET', 'POST'])
+@bp.route('/courses/')
 def courses():
-    if request.method == 'GET':
-        course_table = ofcourse.all()
-        course_table.insert(0, ofcourse.headers())
-        print("courses retrieved")
-        # course_table = json.loads(course_table)
-        return render_template("course/course.html", content=course_table)
-        # return jsonify({'courses': course_table})
+    global coursecode
+    coursecode = ""
+    course_table = courses_table()
+    print("courses retrieved")
+    return render_template("course/course.html", content=course_table, search_details=[search_header, search_value])
         
 @bp.route('/courses/add/')
 def courses_add_view():
@@ -75,12 +75,16 @@ def students_search():
     data = request.get_json()
     print("data:")
     print(data)
-    course_table = ""
-    if(data["search"] != ""):
-        course_table = ofcourse.search(data["header"], data["search"])
-        course_table.insert(0, ofcourse.headers())
+    global search_header, search_value
+    search_header, search_value = data["header"], data["search"]
+    return redirect(url_for("courses.courses"))
+
+def courses_table():
+    courses_table = ""
+    if(not search_header in ["Filter by...", ""]):
+        courses_table = ofcourse.search(search_header, search_value)
+        courses_table.insert(0, ofcourse.headers())
     else:
-        course_table = ofcourse.all()
-        course_table.insert(0, ofcourse.headers())
-    print("students retrieved")
-    return render_template("table.html", content=course_table)
+        courses_table = ofcourse.all()
+        courses_table.insert(0, ofcourse.headers())
+    return courses_table

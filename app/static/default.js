@@ -28,7 +28,7 @@ search_filter = "";
       dropdownBlocks.classList.remove("block");
       dropdownBlocks.classList.add("hidden");
     }
-    if (tableUrl=="/courses/" && $("#formDropdownBox").length > 0){
+    if ($("#formDropdownBox").length > 0){
       var formDropdownBox = document.getElementById("formDropdownBox");
       
       if (
@@ -37,7 +37,6 @@ search_filter = "";
       ) {
         formDropdownBox.classList.remove("block");
         formDropdownBox.classList.add("hidden");
-        document.getElementById("submit_button").classList.remove("hidden");
       }
     }
   }
@@ -113,7 +112,8 @@ xhr.open("POST", searchUrl, true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.setRequestHeader("X-CSRFToken", csrfToken);
     xhr.onload = function () {
-      document.getElementById("table-div").innerHTML = xhr.responseText;
+      document.getElementById("content").innerHTML = xhr.responseText;
+      tablePick();
     };
     xhr.send(JSON.stringify(formData));
     event.preventDefault();
@@ -142,14 +142,20 @@ xhr.open("POST", searchUrl, true);
     if (selectedStudent.includes(id)) {
       for (index in [0, 1, 2, 3, 4, 5, 6, 7]) {
         id = event.target.closest("tr").querySelectorAll("td")[index];
-        id.classList.add("bg-gray-400", "text-white");
-        id.classList.remove("bg-gray-200", "bg-gray-100");
+        if(id){
+          id.classList.add("bg-gray-400", "text-white");
+          id.classList.remove("bg-gray-200", "bg-gray-100");
+        }
+        else index==7;
       }
     } else {
       for (index in [0, 1, 2, 3, 4, 5, 6, 7]) {
         id = event.target.closest("tr").querySelectorAll("td")[index];
-        id.classList.remove("bg-gray-400", "text-white");
-        id.classList.add(index % 2 ? "bg-gray-100" : "bg-gray-200");
+        if(id){
+          id.classList.remove("bg-gray-400", "text-white");
+          id.classList.add(index % 2 ? "bg-gray-100" : "bg-gray-200");
+        }
+        else index==7;
       }
     }
   }
@@ -307,11 +313,16 @@ xhr.open("POST", searchUrl, true);
         return response.text();
       })
       .then((data) => {
-        document.getElementById("content").innerHTML = data;
-        addEntry("edit");
+        const element = document.getElementById(tableUrl.slice(1, -1));
+
+        // Check if the element exists (not null)
+        if (element) {
+          // Programmatically trigger a click event
+          element.click();
+        }
       })
       .catch((error) => {
-        console.error("Fetch error:", error);
+        console.error("Fetch error: in deleteStudentCall");
       });
 
     event.preventDefault();
@@ -320,15 +331,15 @@ xhr.open("POST", searchUrl, true);
   function formDropdown(){
     console.log("formDropdown clicked");
     var formDropdownBlocks = document.getElementById("formDropdownBox");
-    var submit_button = document.getElementById("submit_button");
+    //var submit_button = document.getElementById("submit_button");
     if (formDropdownBlocks.classList.contains("hidden")) {
       formDropdownBlocks.classList.remove("hidden");
       formDropdownBlocks.classList.add("block");
-      submit_button.classList.add("hidden");
+      //submit_button.classList.add("hidden");
     } else {
       formDropdownBlocks.classList.remove("block");
       formDropdownBlocks.classList.add("hidden");
-      submit_button.classList.remove("hidden");
+      //submit_button.classList.remove("hidden");
     }
   }
 
@@ -486,21 +497,27 @@ xhr.open("POST", searchUrl, true);
           event.target.value = cleanedValue + "-";
       });
     }
-    if($("#formDropdownBox").length > 0){// /courses/
+    //if($("#formDropdownBox").length > 0){// /courses/
       console.log("formDropdownBox exists");
-      document.addEventListener("click", function(event) {
-        // if (!document.getElementById("formDropdownBox").classList.contains("hidden")) 
-        //   formDropdown();
-      });
+      // document.addEventListener("click", function(event) {
+      //   if (event.target.id != "formDropdownButton") 
+      //     formDropdown();
+      // });
 
-      document
-        .getElementById("formDropdownButton")
-        .addEventListener("click", formDropdown);
-        
+      if ($("#formDropdownButton").length > 0)
+        document
+          .getElementById("formDropdownButton")
+          .addEventListener("click", formDropdown);
+      
+      if ($("#formDropdownBox-choices").length > 0)
       document
         .getElementById("formDropdownBox-choices")
         .addEventListener("click", formDropdownBlocksClickHandler);
 
+    //}
+
+    function formValidator(formData){
+      
     }
 
 
@@ -532,6 +549,7 @@ xhr.open("POST", searchUrl, true);
               }).text().trim()
           }
         }
+        //formData is passed to formValidator
         console.log("formData is " + JSON.stringify(formData, null, 2));
         const request = new XMLHttpRequest();
         request.open("POST", url);

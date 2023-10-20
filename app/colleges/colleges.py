@@ -12,16 +12,18 @@ from app.models import college_interface
 bp = Blueprint('colleges', __name__)
 
 collegecode = ""
+search_header = "Filter by..."
+search_value = ""
 
-@bp.route('/colleges/', methods=['GET', 'POST'])
+@bp.route('/colleges/')
 def colleges():
-    if request.method == 'GET':
-        college_table = college_interface.all()
-        college_table.insert(0, college_interface.headers())
-        print("colleges retrieved")
-        # college_table = json.loads(college_table)
-        return render_template("college/college.html", content=college_table)
-        # return jsonify({'colleges': college_table})
+    global collegecode
+    collegecode = ""
+    college_table = colleges_table()
+    print("courses retrieved")
+    # college_table = json.loads(college_table)
+    return render_template("college/college.html", content=college_table, search_details=[search_header, search_value])
+    # return jsonify({'colleges': college_table})
         
 @bp.route('/colleges/add/')
 def colleges_add_view():
@@ -69,12 +71,16 @@ def students_search():
     data = request.get_json()
     print("data:")
     print(data)
-    college_table = ""
-    if(data["search"] != ""):
-        college_table = college_interface.search(data["header"], data["search"])
-        college_table.insert(0, college_interface.headers())
+    global search_header, search_value
+    search_header, search_value = data["header"], data["search"]
+    return redirect(url_for("colleges.colleges"))
+
+def colleges_table():
+    colleges_table = ""
+    if(not search_header in ["Filter by...", ""]):
+        colleges_table = college_interface.search(search_header, search_value)
+        colleges_table.insert(0, college_interface.headers())
     else:
-        college_table = college_interface.all()
-        college_table.insert(0, college_interface.headers())
-    print("students retrieved")
-    return render_template("table.html", content=college_table)
+        colleges_table = college_interface.all()
+        colleges_table.insert(0, college_interface.headers())
+    return colleges_table

@@ -11,15 +11,16 @@ from app.models import student_interface, ofcourse
 bp = Blueprint('students', __name__)
 
 studentid = ""
+search_header = "Filter by..."
+search_value = ""
 
 @bp.route('/students/')
 def students():
     global studentid
     studentid = ""
-    student_table = student_interface.all()
-    student_table.insert(0, student_interface.headers())
+    student_table = students_table()
     print("students retrieved")
-    return render_template("student/student.html", content=student_table)
+    return render_template("student/student.html", content=student_table, search_details=[search_header, search_value])
     
 @bp.route('/students/add/')
 def students_add_view():
@@ -80,12 +81,16 @@ def students_search():
     data = request.get_json()
     print("data:")
     print(data)
+    global search_header, search_value
+    search_header, search_value = data["header"], data["search"]
+    return redirect(url_for("students.students"))
+
+def students_table():
     student_table = ""
-    if(data["search"] != ""):
-        student_table = student_interface.search(data["header"], data["search"])
+    if(not search_header in ["Filter by...", ""]):
+        student_table = student_interface.search(search_header, search_value)
         student_table.insert(0, student_interface.headers())
     else:
         student_table = student_interface.all()
         student_table.insert(0, student_interface.headers())
-    print("students retrieved")
-    return render_template("table.html", content=student_table)
+    return student_table
