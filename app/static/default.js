@@ -81,7 +81,12 @@ search_filter = "";
       }
 
       $("#dropdown-to-replace").load(localurl, function(response) {
-        var genderChoice = ""; 
+        var textNode = Array.from(document.getElementById("popupDropdownButton").childNodes).find(function (
+          node
+        ) {
+          return node.nodeType === 3; // Filter text nodes
+        });
+        var genderChoice = textNode.textContent.trim(); 
         document.getElementById("filter-popup").classList.add("show");
         document.getElementById("filter-popup").classList.remove("hidden");
 
