@@ -85,6 +85,17 @@ def students_search():
     search_header, search_value = data["header"], data["search"]
     return redirect(url_for("students.students"))
 
+@bp.route('/students/verify/<id>', methods=["GET"])
+def students_id_confirm(id):
+    if student_interface.confirm_student(id):
+        return jsonify({"response": False})
+    else:
+        return jsonify({"response": True})
+    
+@bp.route('/students/toast/fail/<id>', methods=["GET"])
+def students_toast_fail(id):
+    return render_template("toast_delete.html", error=id+" already exists")
+
 def students_table():
     student_table = ""
     if(not search_header in ["Filter by...", ""]):

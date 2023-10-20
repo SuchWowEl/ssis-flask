@@ -3,12 +3,6 @@ import numpy
 
 
 class Student:
-
-    # def __init__(self, mysql, username=None, password=None, email=None):
-    #     mysql = mysql
-    #     self.username = username
-    #     self.password = password
-    #     self.email = email
     
     def retrieve_student(self, id):
         cursor = mysql.connection.cursor()
@@ -20,11 +14,17 @@ class Student:
         print("retreived student from model:")
         print(result)
         values = []
+        if result == None:
+            return []
         for inner_tuple in result:
             values.append(inner_tuple)
         print("retreived tuplevar from model:")
         print(values)
         return values
+    
+    def confirm_student(self, id):
+        result = self.retrieve_student(id)
+        return len(result)!=0
         
     
     # student_info is dict
@@ -71,7 +71,7 @@ class Student:
 
         sql = f"SELECT * \
             FROM student \
-            WHERE {header} LIKE '%{value}%';"
+            WHERE `{header}` LIKE '%{value}%';"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
@@ -129,16 +129,23 @@ class Course:
         print("a course triggered")
 
         sql = f"SELECT * from course where (`code` = '{code}')"
+        print(sql)
         cursor.execute(sql)
         result = cursor.fetchone() 
         print("retreived course from model:")
         print(result)
         values = []
+        if result == None:
+            return []
         for inner_tuple in result:
             values.append(inner_tuple)
         print("retreived tuplevar from model:")
         print(values)
         return values
+    
+    def confirm_course(self, code):
+        result = self.retrieve_course(code)
+        return len(result)!=0
     
     def add(self, course_info):
         print(course_info)
@@ -177,7 +184,7 @@ class Course:
 
         sql = f"SELECT * \
             FROM course \
-            WHERE {header} LIKE '%{value}%';"
+            WHERE `{header}` LIKE '%{value}%';"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
@@ -247,11 +254,17 @@ class College:
         print("retreived college from model:")
         print(result)
         values = []
+        if result == None:
+            return []
         for inner_tuple in result:
             values.append(inner_tuple)
         print("retreived tuplevar from model:")
         print(values)
         return values
+    
+    def confirm_college(self, code):
+        result = self.retrieve_college(code)
+        return len(result)!=0
     
     # student_info is list
     def add(self, college_info):
@@ -299,7 +312,7 @@ class College:
 
         sql = f"SELECT * \
             FROM college \
-            WHERE {header} LIKE '%{value}%';"
+            WHERE `{header}` LIKE '%{value}%';"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result

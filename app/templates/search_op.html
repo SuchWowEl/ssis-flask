@@ -10,7 +10,7 @@
           class="w-32 justify-end z-10 inline-flex items-center px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
           type="button"
         >
-          Filter by...
+          {{'Filter by...' if search_details[0] == "" else search_details[0]}}
           <svg
             class="w-2.5 h-2.5 ml-2.5"
             aria-hidden="true"
@@ -68,6 +68,7 @@
             id="search-dropdown"
             class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
             placeholder="Search..."
+            value="{{search_details[1]}}"
           />
           <div class="absolute top-0 right-0 flex flex-row h-full">
             <button
@@ -125,7 +126,7 @@
         data-modal-target="info-popup"
         data-modal-toggle="info-popup"
         disabled
-        class="cursor-not-allowed flex w-1/2 flex-row ml-1 items-center justify-center px-2 h-full text-gray-200 bg-red-400 rounded-lg border border-red-400"
+        class="cursor-not-allowed flex w-1/2 flex-row ml-1 items-center justify-center px-2 h-full text-gray-200 bg-red-300 rounded-lg border border-red-400"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

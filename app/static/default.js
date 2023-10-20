@@ -478,24 +478,6 @@ xhr.open("POST", searchUrl, true);
 
     if($("#id").length > 0){// /students/
       const input = document.getElementById("id");
-
-      input.addEventListener("input", function (event) {
-        const inputValue = event.target.value;
-
-        // Remove any non-numeric characters and limit the length to 4
-        const cleanedValue = inputValue.replace(/[^\d-]/g, "");
-
-        event.target.value = cleanedValue;
-
-        if (cleanedValue[cleanedValue.length - 1] == "-")
-          event.target.value = cleanedValue.substring(0, cleanedValue.length - 1);
-        else if (
-          cleanedValue.length === 4 ||
-          (cleanedValue.length == 5 &&
-            cleanedValue[cleanedValue.length - 1] != "-")
-        )
-          event.target.value = cleanedValue + "-";
-      });
     }
     //if($("#formDropdownBox").length > 0){// /courses/
       console.log("formDropdownBox exists");
@@ -517,7 +499,57 @@ xhr.open("POST", searchUrl, true);
     //}
 
     function formValidator(formData){
-      
+      toCheck = ("id" in formData) ? "id" : "code";
+        $.ajax({
+          url: tableUrl+"verify/"+formData[toCheck],
+          type: "GET",
+          success: function(response){
+            if (response["response"]!==true){
+              console.log("Failed")
+              $.get(tableUrl+"toast/fail/"+formData[toCheck], function(response) {
+                $("#edit_page").append(response);
+                var toast = document.getElementById("toast-danger");
+                var closeButton = toast.querySelector("[data-dismiss-target]");
+
+                toast.classList.add("show");
+                toast.classList.remove("hidden");
+
+                closeButton.addEventListener("click", function () {
+                    console.log("closed");
+                    toast.classList.remove("show");
+                    toast.classList.add("hidden");
+                });
+              });
+            }
+            else {
+              console.log("Add success");
+              modifyDatabase(formData);
+            }
+          }
+        });
+      }
+
+    function modifyDatabase(formData){
+      console.log("Success")
+      console.log("formData is " + JSON.stringify(formData, null, 2));
+      const request = new XMLHttpRequest();
+      request.open("POST", url);
+      request.onload = () => {
+        console.log("POST SUCCESSFUL");
+        const element = document.getElementById(tableUrl.slice(1, -1));
+
+        // Check if the element exists (not null)
+        if (element) {
+          // Programmatically trigger a click event
+          element.click();
+        }
+      };
+      request.setRequestHeader("Content-type", "application/json");
+      const csrfToken = document
+        .querySelector("meta[name=csrf-token]")
+        .getAttribute("content");
+      request.setRequestHeader("X-CSRFToken", csrfToken);
+      request.send(JSON.stringify(formData));
     }
 
 
@@ -533,10 +565,12 @@ xhr.open("POST", searchUrl, true);
             id: $("#id").val(),
             firstname: $("#firstname").val(),
             lastname: $("#lastname").val(),
-            course: $("#course").val(),
             year: $("#year").val(),
             gender: $("#gender").val(),
-          }
+          };
+          formData["course"] = $("#formDropdownButton").contents().filter(function() {            
+                  return this.nodeType === 3; // Filter text nodes
+              }).text().trim();
         }
         else{
           formData = {
@@ -549,26 +583,9 @@ xhr.open("POST", searchUrl, true);
               }).text().trim()
           }
         }
-        //formData is passed to formValidator
-        console.log("formData is " + JSON.stringify(formData, null, 2));
-        const request = new XMLHttpRequest();
-        request.open("POST", url);
-        request.onload = () => {
-          console.log("POST SUCCESSFUL");
-          const element = document.getElementById(tableUrl.slice(1, -1));
-
-          // Check if the element exists (not null)
-          if (element) {
-            // Programmatically trigger a click event
-            element.click();
-          }
-        };
-        request.setRequestHeader("Content-type", "application/json");
-        const csrfToken = document
-          .querySelector("meta[name=csrf-token]")
-          .getAttribute("content");
-        request.setRequestHeader("X-CSRFToken", csrfToken);
-        request.send(JSON.stringify(formData));
+        console.log(formData)
+        if (type=="add") formValidator(formData);
+        else modifyDatabase(formData);
         event.preventDefault();
       });
   }
