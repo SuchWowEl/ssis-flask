@@ -76,6 +76,14 @@ class Student:
         result = cursor.fetchall()
         return result
     
+    def studentids(self):
+        cursor = mysql.connection.cursor()
+
+        sql = "SELECT id from student"
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        return result
+    
     def headers(self):
         cursor = mysql.connection.cursor()
         sql = "SELECT COLUMN_NAME \

@@ -54,7 +54,8 @@
             <li>
               <button
                 type="button"
-                class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white
+                {{"filter-popup-triggerer" if header in ["course", "gender", "college"]}}"
               >
                 {{header}}
               </button>
@@ -64,16 +65,19 @@
         </div>
         <div class="relative w-9/12 pr-1">
           <input
+            {{"disabled" if search_details[0] in ["gender", "course", "college"]}}
             type="search"
             id="search-dropdown"
-            class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+            class="{{"cursor-not-allowed" if search_details[0] in ["gender", "course", "college"]}} block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
             placeholder="Search..."
             value="{{search_details[1]}}"
           />
           <div class="absolute top-0 right-0 flex flex-row h-full">
             <button
+              id="search_op_button"
+              {{"disabled" if search_details[0] in ["gender", "course", "college"]}}
               type="submit"
-              class="px-2 h-full text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              class="{{"cursor-not-allowed" if search_details[0] in ["gender", "course", "college"]}} px-2 h-full text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               <svg
                 class="w-4 h-4"

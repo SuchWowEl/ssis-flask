@@ -105,3 +105,8 @@ def students_table():
         student_table = student_interface.all()
         student_table.insert(0, student_interface.headers())
     return student_table
+
+@bp.route('/students/gender/retriever/')
+def gender_retriever():
+    genders = ["Male", "Female", "Others"]
+    return render_template("filter_dropdown.html", content = genders)

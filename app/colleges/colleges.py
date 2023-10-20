@@ -95,3 +95,10 @@ def colleges_table():
         colleges_table = college_interface.all()
         colleges_table.insert(0, college_interface.headers())
     return colleges_table
+
+@bp.route('/colleges/retriever/')
+def colleges_retriever():
+    college_table = college_interface.collegecodes()
+    print(college_table)
+    colleges = [item[0] for item in college_table]
+    return render_template("filter_dropdown.html", content = colleges)

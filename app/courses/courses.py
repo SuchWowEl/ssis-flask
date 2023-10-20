@@ -99,3 +99,10 @@ def courses_table():
         courses_table = ofcourse.all()
         courses_table.insert(0, ofcourse.headers())
     return courses_table
+
+@bp.route('/courses/retriever/')
+def courses_retriever():
+    course_table = ofcourse.coursecodes()
+    print(course_table)
+    courses = [item[0] for item in course_table]
+    return render_template("filter_dropdown.html", content = courses)

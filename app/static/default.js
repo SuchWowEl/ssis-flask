@@ -41,6 +41,18 @@ search_filter = "";
     }
   }
 
+  function filterDropdownChecker(){
+    var thebox = document.getElementById("popupDropdownBox");
+    if (thebox.classList.contains("show")){
+      document.getElementById("popupDropdownBox").classList.remove("show");
+      document.getElementById("popupDropdownBox").classList.add("hidden");
+    }
+    else{
+      document.getElementById("popupDropdownBox").classList.add("show");
+      document.getElementById("popupDropdownBox").classList.remove("hidden");
+    }
+  }
+  
   // Function to handle clicks on dropdown-blocks
   function dropdownBlocksClickHandler(event) {
     if (event.target.tagName === "BUTTON") {
@@ -51,10 +63,81 @@ search_filter = "";
         return node.nodeType === 3; // Filter text nodes
       });
       textNode.replaceWith(event.target.textContent);
-search_filter = event.target.textContent.trim();
+      search_filter = event.target.textContent.trim();
     }
-console.log("search_filter");
+    console.log("search_filter");
     console.log(search_filter);
+        
+    if (["gender", "course", "college"].includes(search_filter)){
+      console.log("search_filter gets in");
+      if (search_filter == "gender"){
+        localurl = "students/gender/retriever"
+      }
+      else if (search_filter == "course"){
+        localurl = "courses/retriever"
+      }
+      else {
+        localurl = "colleges/retriever"
+      }
+
+      $("#dropdown-to-replace").load(localurl, function(response) {
+        var genderChoice = ""; 
+        document.getElementById("filter-popup").classList.add("show");
+        document.getElementById("filter-popup").classList.remove("hidden");
+
+        document.getElementById("proceed-to-filter").addEventListener("click", 
+        function(){
+          const csrfToken = document
+            .querySelector("meta[name=csrf-token]")
+            .getAttribute("content");
+          const formData = {
+            header: search_filter,
+            search: genderChoice
+          };
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST",tableUrl + "search/", true);
+          xhr.setRequestHeader("Content-Type", "application/json");
+          xhr.setRequestHeader("X-CSRFToken", csrfToken);
+          xhr.onload = function () {
+            document.getElementById("content").innerHTML = xhr.responseText;
+            tablePick();
+          };
+          xhr.send(JSON.stringify(formData));
+        });
+        document.getElementById("popupDropdownButton").addEventListener("click",filterDropdownChecker);
+        document.getElementById("popupDropdownBox-choices").addEventListener("click", function(event) {
+          console.log("dropdown chose");
+          if (event.target.tagName === "BUTTON") {
+            console.log("valid");
+            var dropdownButton = document.getElementById("popupDropdownButton");
+            var textNode = Array.from(dropdownButton.childNodes).find(function (
+              node
+            ) {
+              return node.nodeType === 3; // Filter text nodes
+            });
+            textNode.replaceWith(event.target.textContent);
+            genderChoice = event.target.textContent.trim();
+            filterDropdownChecker();
+          }
+        });
+        // var toast = document.getElementById("toast-danger");
+        // var closeButton = toast.querySelector("[data-dismiss-target]");
+
+        // toast.classList.add("show");
+        // toast.classList.remove("hidden");
+
+        // closeButton.addEventListener("click", function () {
+        //     console.log("closed");
+        //     toast.classList.remove("show");
+        //     toast.classList.add("hidden");
+        // });
+      });
+    }
+    else{
+      document.getElementById("search-dropdown").disabled = document.getElementById("search_op_button").disabled = false;
+      document.getElementById("search-dropdown").classList.remove("cursor-not-allowed");
+      document.getElementById("search_op_button").classList.remove("cursor-not-allowed");
+    }
   }
 
   // Function to handle the click event on .btn-tabs elements
@@ -260,8 +343,8 @@ xhr.open("POST", searchUrl, true);
     //bg-red-700 border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300
     //bg-red-400 border-red-400
   }
-
-  function closingDeleteDialog() {
+  
+    function closingDeleteDialog() {
     console.log("CLOSING DIALOG");
     const divToDelete = document.querySelector("[modal-backdrop]");
     document.getElementById("info-popup").classList.add("hidden");
@@ -361,6 +444,7 @@ xhr.open("POST", searchUrl, true);
 
   function tablePick() {
     console.log("tablePick function executed");
+
 
     // Add event listeners for the dropdown functionality
     document
