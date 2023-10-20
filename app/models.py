@@ -69,9 +69,15 @@ class Student:
         cursor = mysql.connection.cursor()
         print("students triggered")
 
-        sql = f"SELECT * \
-            FROM student \
-            WHERE `{header}` LIKE '%{value}%';"
+        sql = ""
+        if(header != "gender"):
+            sql = f"SELECT * \
+                FROM student \
+                WHERE `{header}` LIKE '%{value}%';"
+        else:
+            sql = f"SELECT * \
+                FROM student \
+                WHERE `{header}` = '{value}';"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
@@ -190,9 +196,15 @@ class Course:
         cursor = mysql.connection.cursor()
         print("courses search")
 
-        sql = f"SELECT * \
-            FROM course \
-            WHERE `{header}` LIKE '%{value}%';"
+        sql = ""
+        if(header != "gender"):
+            sql = f"SELECT * \
+                FROM course \
+                WHERE `{header}` LIKE '%{value}%';"
+        else:
+            sql = f"SELECT * \
+                FROM course \
+                WHERE `{header}`  '{value}';"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
