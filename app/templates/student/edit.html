@@ -101,7 +101,7 @@
               required
             >
               {% for gender in ["Male", "Female", "Others"] %}
-              <option selected value="{{gender}}" {{'selected' if gender == info[5]}}>{{gender}}</option>
+              <option value="{{gender}}" {{'selected' if gender == info[5]}}>{{gender}}</option>
               {%endfor%}
             </select>
           </div>
