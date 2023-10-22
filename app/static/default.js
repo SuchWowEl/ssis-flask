@@ -64,6 +64,16 @@ search_filter = "";
       });
       textNode.replaceWith(event.target.textContent);
       search_filter = event.target.textContent.trim();
+      if(["gender", "course", "college"].includes(search_filter)){
+        document.getElementById("search-dropdown").classList.add("cursor-not-allowed");
+        document.getElementById("search-dropdown").setAttribute("disabled", "true");
+        document.getElementById("search_op_button").classList.add("cursor-not-allowed");
+      }
+      else{
+        document.getElementById("search-dropdown").classList.remove("cursor-not-allowed");
+        document.getElementById("search-dropdown").setAttribute("disabled", null);
+        document.getElementById("search_op_button").classList.remove("cursor-not-allowed");
+      }
     }
     console.log("search_filter");
     console.log(search_filter);
