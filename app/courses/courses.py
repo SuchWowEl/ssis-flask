@@ -35,9 +35,12 @@ def courses_add():
     print("courses_add called")
     data = request.get_json()
     print("form: " + str(data))
-    ofcourse.add(data)
-    return redirect(url_for("courses.courses"))
-
+    try:
+        ofcourse.add(data)
+        return jsonify({'response':True})
+    except Exception as e:
+        return jsonify({'response':str(e)})
+    
 @bp.route('/courses/edit/', methods=['POST'])
 def courses_edit_view():
     print("courses_edit called")
@@ -51,15 +54,18 @@ def courses_edit_view():
     return render_template("course/edit.html", content=colleges, info=courseInfo)
 
 @bp.route('/courses/editcourse/', methods=['POST'])
-def students_edit():
+def courses_edit():
     global coursecode 
-    print("students_edit called")
+    print("coursecode called")
     data = request.get_json()
     print("form: " + str(data))
-    ofcourse.update(data, coursecode)
+    response = ofcourse.update(data, coursecode)
     coursecode = ""
-    return redirect(url_for("courses.courses"))
-
+    if response != True:
+        response = str(response)
+    print(response)
+    return jsonify({'response': response})
+        
 @bp.route('/courses/delete/', methods=['POST'])
 def courses_delete():
     data = request.get_json()
@@ -70,7 +76,7 @@ def courses_delete():
     return redirect(url_for("courses.courses"))
 
 @bp.route('/courses/search/', methods=['POST'])
-def students_search():
+def courses_search():
     # data = request.get_json()
     data = request.get_json()
     print("data:")
@@ -80,14 +86,14 @@ def students_search():
     return redirect(url_for("courses.courses"))
 
 @bp.route('/courses/verify/<id>', methods=["GET"])
-def students_id_confirm(id):
+def courses_id_confirm(id):
     if ofcourse.confirm_course(id):
-        return jsonify({"response": False})
+        return jsonify({"response": str(id)+" already exists"})
     else:
         return jsonify({"response": True})
     
 @bp.route('/courses/toast/fail/<id>', methods=["GET"])
-def students_toast_fail(id):
+def courses_toast_fail(id):
     return render_template("toast_delete.html", error=id+" already exists")
 
 def courses_table():

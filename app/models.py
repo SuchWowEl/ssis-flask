@@ -44,15 +44,19 @@ class Student:
     def update(self, student_info, studentID):
         cursor = mysql.connection.cursor()
         
-        sql = f"UPDATE `student` \
-                SET `id` = '{student_info['id']}', `firstname` = '{student_info['firstname']}', `lastname` = '{student_info['lastname']}', \
-                `course` = '{student_info['course']}', `year` = {student_info['year']}, `gender` = '{student_info['gender']}' \
-                WHERE `id` = '{studentID}'"
-                
-        print(sql)
+        try:
+            sql = f"UPDATE `student` \
+                    SET `id` = '{student_info['id']}', `firstname` = '{student_info['firstname']}', `lastname` = '{student_info['lastname']}', \
+                    `course` = '{student_info['course']}', `year` = {student_info['year']}, `gender` = '{student_info['gender']}' \
+                    WHERE `id` = '{studentID}'"
+                    
+            print(sql)
 
-        cursor.execute(sql)
-        mysql.connection.commit()
+            cursor.execute(sql)
+            mysql.connection.commit()
+            return True
+        except Exception as e:
+            return e
         
     # @classmethod
     def all(self):
@@ -107,15 +111,19 @@ class Student:
         
     def delete_rows(self, id_to_delete):
         # id_to_delete = ["John Doe", "Jane Doe"]
-        cursor = mysql.connection.cursor()
-        if not isinstance(id_to_delete, (list, tuple, numpy.ndarray)):
-            id_to_delete = [id_to_delete]
-        placeholders = ",".join(["%s"] * len(id_to_delete))
-        sql = "DELETE FROM student WHERE `id` IN ({})".format(
-            placeholders)
-        # sql2 = " IN ({})".format(placeholders)
-        cursor.execute(sql, tuple(id_to_delete))
-        mysql.connection.commit()
+        try:
+            cursor = mysql.connection.cursor()
+            if not isinstance(id_to_delete, (list, tuple, numpy.ndarray)):
+                id_to_delete = [id_to_delete]
+            placeholders = ",".join(["%s"] * len(id_to_delete))
+            sql = "DELETE FROM student WHERE `id` IN ({})".format(
+                placeholders)
+            # sql2 = " IN ({})".format(placeholders)
+            cursor.execute(sql, tuple(id_to_delete))
+            mysql.connection.commit()
+            return True
+        except Exception as e:
+            return e
 
     # @classmethod
     def delete(self,id):    
@@ -173,15 +181,19 @@ class Course:
         mysql.connection.commit()
         
     def update(self, course_info, courseCode):
-        cursor = mysql.connection.cursor()
-        
-        # UPDATE `ssis`.`student` SET `firstname` = 'asda' WHERE (`id` = '2021-0001');
-        sql = f"UPDATE `course` \
-                SET `code` = '{course_info['code']}', `name` = '{course_info['name']}', `college` = '{course_info['college']}' \
-                WHERE `code` = '{courseCode}'"
+        try:
+            cursor = mysql.connection.cursor()
+            
+            # UPDATE `ssis`.`student` SET `firstname` = 'asda' WHERE (`id` = '2021-0001');
+            sql = f"UPDATE `course` \
+                    SET `code` = '{course_info['code']}', `name` = '{course_info['name']}', `college` = '{course_info['college']}' \
+                    WHERE `code` = '{courseCode}'"
 
-        cursor.execute(sql)
-        mysql.connection.commit()
+            cursor.execute(sql)
+            mysql.connection.commit()
+            return True
+        except Exception as e:
+            return e
     # @classmethod
     def all(self):
         cursor = mysql.connection.cursor()
@@ -297,15 +309,19 @@ class College:
         mysql.connection.commit()
         
     def update(self, college_info, collegeCode):
-        cursor = mysql.connection.cursor()
-        
-        # UPDATE `ssis`.`student` SET `firstname` = 'asda' WHERE (`id` = '2021-0001');
-        sql = f"UPDATE `college` \
-        SET `code` = '{college_info['code']}', `name` = '{college_info['name']}' \
-        WHERE `code` = '{collegeCode}'"
+        try:
+            cursor = mysql.connection.cursor()
+            
+            # UPDATE `ssis`.`student` SET `firstname` = 'asda' WHERE (`id` = '2021-0001');
+            sql = f"UPDATE `college` \
+            SET `code` = '{college_info['code']}', `name` = '{college_info['name']}' \
+            WHERE `code` = '{collegeCode}'"
 
-        cursor.execute(sql)
-        mysql.connection.commit()
+            cursor.execute(sql)
+            mysql.connection.commit()
+            return True
+        except Exception as e:
+            return e
     
     def collegecodes(self):
         cursor = mysql.connection.cursor()

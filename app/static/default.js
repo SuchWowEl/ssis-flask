@@ -404,23 +404,17 @@ xhr.open("POST", searchUrl, true);
       },
       body: JSON.stringify(formData),
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Network response was not ok: ${response.status}`);
-        }
-        return response.text();
-      })
       .then((data) => {
-        const element = document.getElementById(tableUrl.slice(1, -1));
+        if(data){
+          const element = document.getElementById(tableUrl.slice(1, -1));
 
-        // Check if the element exists (not null)
-        if (element) {
-          // Programmatically trigger a click event
-          element.click();
+          // Check if the element exists (not null)
+          if (element) {
+            // Programmatically trigger a click event
+            element.click();
+          }
         }
-      })
-      .catch((error) => {
-        console.error("Fetch error: in deleteStudentCall");
+        else alert(data);
       });
 
     event.preventDefault();
@@ -604,21 +598,22 @@ xhr.open("POST", searchUrl, true);
           type: "GET",
           success: function(response){
             if (response["response"]!==true){
-              console.log("Failed")
-              $.get(tableUrl+"toast/fail/"+formData[toCheck], function(response) {
-                $("#edit_page").append(response);
-                var toast = document.getElementById("toast-danger");
-                var closeButton = toast.querySelector("[data-dismiss-target]");
+              console.log("Failed");
+              alert(response["response"]);
+              // $.get(tableUrl+"toast/fail/"+formData[toCheck], function(response) {
+              //   $("#edit_page").append(response);
+              //   var toast = document.getElementById("toast-danger");
+              //   var closeButton = toast.querySelector("[data-dismiss-target]");
 
-                toast.classList.add("show");
-                toast.classList.remove("hidden");
+              //   toast.classList.add("show");
+              //   toast.classList.remove("hidden");
 
-                closeButton.addEventListener("click", function () {
-                    console.log("closed");
-                    toast.classList.remove("show");
-                    toast.classList.add("hidden");
-                });
-              });
+              //   closeButton.addEventListener("click", function () {
+              //       console.log("closed");
+              //       toast.classList.remove("show");
+              //       toast.classList.add("hidden");
+              //   });
+              // });
             }
             else {
               console.log("Add success");
@@ -631,24 +626,30 @@ xhr.open("POST", searchUrl, true);
     function modifyDatabase(formData){
       console.log("Success")
       console.log("formData is " + JSON.stringify(formData, null, 2));
-      const request = new XMLHttpRequest();
-      request.open("POST", url);
-      request.onload = () => {
-        console.log("POST SUCCESSFUL");
-        const element = document.getElementById(tableUrl.slice(1, -1));
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: JSON.stringify(formData),
+        contentType: "application/json", // Set the content type to JSON
+        headers: {
+          "X-CSRFToken": $('meta[name=csrf-token]').attr('content')
+        },
+        success: function(response) {
+          if(response["response"]===true){
+            console.log("POST SUCCESSFUL");
+            var element = document.getElementById(tableUrl.slice(1, -1));
 
-        // Check if the element exists (not null)
-        if (element) {
-          // Programmatically trigger a click event
-          element.click();
-        }
-      };
-      request.setRequestHeader("Content-type", "application/json");
-      const csrfToken = document
-        .querySelector("meta[name=csrf-token]")
-        .getAttribute("content");
-      request.setRequestHeader("X-CSRFToken", csrfToken);
-      request.send(JSON.stringify(formData));
+            // Check if the element exists (not null)
+            if (element) {
+              // Programmatically trigger a click event
+              $(element).click();
+            }
+          }
+          else{
+            alert(response["response"]);
+          }
+        },
+      });
     }
 
 
@@ -661,7 +662,7 @@ xhr.open("POST", searchUrl, true);
         var formData = {};
         if (tableUrl=="/students/"){
           formData = {
-            id: $("#id").val(),
+            id: $("#id").val().trim(),
             firstname: $("#firstname").val(),
             lastname: $("#lastname").val(),
             year: $("#year").val(),
@@ -673,7 +674,7 @@ xhr.open("POST", searchUrl, true);
         }
         else{
           formData = {
-            code: $("#code").val(),
+            code: $("#code").val().trim(),
             name: $("#name").val(),
           }
           if (tableUrl=="/courses/"){

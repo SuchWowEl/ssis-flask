@@ -34,8 +34,11 @@ def students_add():
     print("students_add called")
     data = request.get_json()
     print("form: " + str(data))
-    student_interface.add(data)
-    return jsonify({"ok":True})
+    try:
+        student_interface.add(data)
+        return jsonify({'response':True})
+    except Exception as e:
+        return jsonify({'response':str(e)})
     
 @bp.route('/students/edit/', methods=['POST'])
 def students_edit_view():
@@ -57,9 +60,12 @@ def students_edit():
     print("students_edit called")
     data = request.get_json()
     print("form: " + str(data))
-    student_interface.update(data, studentid)
+    response = student_interface.update(data, studentid)
     studentid = ""
-    return redirect(url_for("students.students"))
+    if response != True:
+        response = str(response)
+    print(response)
+    return jsonify({'response': response})
     # student_table = student_interface.all()
     # student_table.insert(0, student_interface.headers())
     # print("students retrieved")
@@ -72,8 +78,10 @@ def students_delete():
     print(data)
     list = data["list"]
     print("list is " + str(list))
-    student_interface.delete_rows(list)
-    return redirect(url_for("students.students"))
+    response = student_interface.delete_rows(list)
+    if response != True:
+        response = str(response)
+    return response
 
 @bp.route('/students/search/', methods=['POST'])
 def students_search():
@@ -88,7 +96,7 @@ def students_search():
 @bp.route('/students/verify/<id>', methods=["GET"])
 def students_id_confirm(id):
     if student_interface.confirm_student(id):
-        return jsonify({"response": False})
+        return jsonify({"response": str(id)+" already exists"})
     else:
         return jsonify({"response": True})
     

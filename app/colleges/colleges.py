@@ -34,9 +34,12 @@ def colleges_add():
     print("colleges_add called")
     data = request.get_json()
     print("form: " + str(data))
-    college_interface.add(data)
-    return redirect(url_for("colleges.colleges"))
-
+    try:
+        college_interface.add(data)
+        return jsonify({'response':True})
+    except Exception as e:
+        return jsonify({'response':str(e)})
+    
 @bp.route('/colleges/edit/', methods=['POST'])
 def colleges_edit_view():
     print("colleges_edit_view called")
@@ -49,12 +52,15 @@ def colleges_edit_view():
 @bp.route('/colleges/editcollege/', methods=['POST'])
 def colleges_edit():
     global collegecode 
-    print("students_edit called")
+    print("colleges_edit called")
     data = request.get_json()
     print("form: " + str(data))
-    college_interface.update(data, collegecode)
+    response = college_interface.update(data, collegecode)
     collegecode = ""
-    return redirect(url_for("colleges.colleges"))
+    if response != True:
+        response = str(response)
+    print(response)
+    return jsonify({'response': response})
 
 @bp.route('/colleges/delete/', methods=['POST'])
 def colleges_delete():
@@ -66,7 +72,7 @@ def colleges_delete():
     return redirect(url_for("colleges.colleges"))
 
 @bp.route('/colleges/search/', methods=['POST'])
-def students_search():
+def colleges_search():
     # data = request.get_json()
     data = request.get_json()
     print("data:")
@@ -76,14 +82,14 @@ def students_search():
     return redirect(url_for("colleges.colleges"))
 
 @bp.route('/colleges/verify/<id>', methods=["GET"])
-def students_id_confirm(id):
+def colleges_id_confirm(id):
     if college_interface.confirm_college(id):
-        return jsonify({"response": False})
+        return jsonify({"response": str(id)+" already exists"})
     else:
         return jsonify({"response": True})
     
 @bp.route('/colleges/toast/fail/<id>', methods=["GET"])
-def students_toast_fail(id):
+def colleges_toast_fail(id):
     return render_template("toast_delete.html", error=id+" already exists")
 
 def colleges_table():
