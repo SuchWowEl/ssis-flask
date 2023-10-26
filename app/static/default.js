@@ -131,16 +131,6 @@ search_filter = "";
             }
           });
           event.preventDefault();
-          
-          // var xhr = new XMLHttpRequest();
-          // xhr.open("POST",tableUrl + "search/", true);
-          // xhr.setRequestHeader("Content-Type", "application/json");
-          // xhr.setRequestHeader("X-CSRFToken", csrfToken);
-          // xhr.onload = function () {
-          //   document.getElementById("content").innerHTML = xhr.responseText;
-          //   tablePick();
-          // };
-          // xhr.send(JSON.stringify(formData));
         });
         document.getElementById("popupDropdownButton").addEventListener("click",filterDropdownChecker);
         document.getElementById("popupDropdownBox-choices").addEventListener("click", function(event) {
@@ -183,8 +173,7 @@ search_filter = "";
     tableUrl = "/" + event.target.id + "/";
     var content = document.getElementById("content");
     search_filter = "";
-
-    // Perform an AJAX load operation (you may need to use another approach like fetch or XMLHttpRequest)
+    
     fetch(tableUrl)
         .then((response) => {
           if (!response.ok) {
@@ -210,9 +199,6 @@ search_filter = "";
   function searchTable(event){
     console.log("SEARCHTABLE");
     searchUrl = tableUrl + "search/";
-    // const csrfToken = document
-    //   .querySelector("meta[name=csrf-token]")
-    //   .getAttribute("content");
     const formData = {
       header: search_filter,
       search: document.getElementById("search-dropdown").value
@@ -226,9 +212,7 @@ search_filter = "";
           console.log("search success");
           const element = document.getElementById(tableUrl.slice(1, -1));
 
-          // Check if the element exists (not null)
           if (element) {
-            // Programmatically trigger a click event
             element.click();
           }
         }
@@ -364,8 +348,6 @@ search_filter = "";
         "border-red-300"
       );
     }
-    //bg-red-700 border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300
-    //bg-red-400 border-red-400
   }
   
     function closingDeleteDialog() {
@@ -493,12 +475,6 @@ search_filter = "";
           .getElementById("searchbar-form")
           .addEventListener("submit", searchTable);
 
-    // document
-    //   .getElementById("delete_button")
-    //   .setAttribute("data-modal-target", "info-popup");
-    // document
-    //   .getElementById("delete_button")
-    //   .setAttribute("data-modal-toggle", "info-popup");
     document
       .getElementById("proceed-to-delete")
       .addEventListener("click", deleteCall);
@@ -520,14 +496,6 @@ search_filter = "";
       });
 
     });
-    // Perform an AJAX load operation (you may need to use another approach like fetch or XMLHttpRequest)
-    /*var xhr = new XMLHttpRequest();
-      xhr.onload = function () {
-        content.innerHTML = this.responseText;
-        addEntry();
-      };
-      xhr.open("GET", addUrl, true);
-      xhr.send();*/
 
     document.querySelector("table").addEventListener("click", function (event) {
       if (event.target.classList.contains("edit-btn")) {
@@ -559,19 +527,6 @@ search_filter = "";
           addEntry("edit");
         });
         event.preventDefault();
-        // const request = new XMLHttpRequest();
-        // request.open("POST", editUrl);
-        // request.onload = function () {
-        //   document.getElementById("content").innerHTML = this.responseText;
-        //   addEntry("edit");
-        // };
-        // request.setRequestHeader("Content-type", "application/json");
-        // const csrfToken = document
-        //   .querySelector("meta[name=csrf-token]")
-        //   .getAttribute("content");
-        // request.setRequestHeader("X-CSRFToken", csrfToken);
-        // request.send(JSON.stringify(formData));
-        // event.preventDefault();
       }
     });
   }
@@ -583,12 +538,7 @@ search_filter = "";
     if($("#id").length > 0){// /students/
       const input = document.getElementById("id");
     }
-    //if($("#formDropdownBox").length > 0){// /courses/
       console.log("formDropdownBox exists");
-      // document.addEventListener("click", function(event) {
-      //   if (event.target.id != "formDropdownButton") 
-      //     formDropdown();
-      // });
 
       if ($("#formDropdownButton").length > 0)
         document
@@ -611,20 +561,6 @@ search_filter = "";
             if (response["response"]!==true){
               console.log("Failed");
               alert(response["response"]);
-              // $.get(tableUrl+"toast/fail/"+formData[toCheck], function(response) {
-              //   $("#edit_page").append(response);
-              //   var toast = document.getElementById("toast-danger");
-              //   var closeButton = toast.querySelector("[data-dismiss-target]");
-
-              //   toast.classList.add("show");
-              //   toast.classList.remove("hidden");
-
-              //   closeButton.addEventListener("click", function () {
-              //       console.log("closed");
-              //       toast.classList.remove("show");
-              //       toast.classList.add("hidden");
-              //   });
-              // });
             }
             else {
               console.log("Add success");
