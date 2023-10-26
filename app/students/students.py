@@ -40,13 +40,13 @@ def students_add():
     except Exception as e:
         return jsonify({'response':str(e)})
     
-@bp.route('/students/edit/', methods=['POST'])
+@bp.route('/students/edit/', methods=['GET'])
 def students_edit_view():
-    print("students_add called")
-    data = request.get_json()
-    studentInfo = student_interface.retrieve_student(data["id"])
+    print("/students/edit/ called")
+    id_to_edit = request.args.getlist('id')
+    studentInfo = student_interface.retrieve_student(id_to_edit[0])
     global studentid 
-    studentid = data["id"]
+    studentid = id_to_edit[0]
     course_table = ofcourse.coursecodes()
     print("studentInfo from controller:")
     print(studentInfo)
@@ -79,19 +79,11 @@ def students_delete():
     list = data["list"]
     print("list is " + str(list))
     response = student_interface.delete_rows(list)
+    print(f"delete is {response}")
     if response != True:
+        print("delete failed")
         response = str(response)
-    return response
-
-# @bp.route('/students/search/', methods=['POST'])
-# def students_search():
-#     # data = request.get_json()
-#     data = request.get_json()
-#     print("data:")
-#     print(data)
-#     global search_header, search_value
-#     search_header, search_value = data["header"], data["search"]
-#     return redirect(url_for("students.students"))
+    return jsonify({'response': response})
 
 @bp.route('/students/search/', methods=['GET'])
 def students_search():

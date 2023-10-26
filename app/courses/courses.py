@@ -41,13 +41,13 @@ def courses_add():
     except Exception as e:
         return jsonify({'response':str(e)})
     
-@bp.route('/courses/edit/', methods=['POST'])
+@bp.route('/courses/edit/', methods=['GET'])
 def courses_edit_view():
     print("courses_edit called")
-    data = request.get_json()
-    courseInfo = ofcourse.retrieve_course(data["code"])
+    code_to_edit = request.args.getlist('code')
+    courseInfo = ofcourse.retrieve_course(code_to_edit[0])
     global coursecode 
-    coursecode = data["code"]
+    coursecode = code_to_edit[0]
     college_table = college_interface.collegecodes()
     print(college_table)
     colleges = [item[0] for item in college_table]
@@ -72,8 +72,10 @@ def courses_delete():
     print(data)
     list = data["list"]
     print("list is " + str(list))
-    ofcourse.delete_rows(list)
-    return redirect(url_for("courses.courses"))
+    response = ofcourse.delete_rows(list)
+    if response != True:
+        response = str(response)
+    return jsonify({"response": response})
 
 @bp.route('/courses/search/', methods=['GET'])
 def courses_search():

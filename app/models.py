@@ -247,15 +247,19 @@ class Course:
 
     def delete_rows(self, id_to_delete):
         # id_to_delete = ["John Doe", "Jane Doe"]
-        cursor = mysql.connection.cursor()
-        if not isinstance(id_to_delete, (list, tuple, numpy.ndarray)):
-            id_to_delete = [id_to_delete]
-        placeholders = ",".join(["%s"] * len(id_to_delete))
-        sql = "DELETE FROM course WHERE `code` IN ({})".format(
-            placeholders)
-        # sql2 = " IN ({})".format(placeholders)
-        cursor.execute(sql, tuple(id_to_delete))
-        mysql.connection.commit()
+        try:
+            cursor = mysql.connection.cursor()
+            if not isinstance(id_to_delete, (list, tuple, numpy.ndarray)):
+                id_to_delete = [id_to_delete]
+            placeholders = ",".join(["%s"] * len(id_to_delete))
+            sql = "DELETE FROM course WHERE `code` IN ({})".format(
+                placeholders)
+            # sql2 = " IN ({})".format(placeholders)
+            cursor.execute(sql, tuple(id_to_delete))
+            mysql.connection.commit()
+            return True
+        except Exception as e:
+            return e
 
     # @classmethod
     def delete(self,id):    
@@ -369,16 +373,20 @@ class College:
         return tuplevar
 
     def delete_rows(self, id_to_delete):
-        # id_to_delete = ["John Doe", "Jane Doe"]
-        cursor = mysql.connection.cursor()
-        if not isinstance(id_to_delete, (list, tuple, numpy.ndarray)):
-            id_to_delete = [id_to_delete]
-        placeholders = ",".join(["%s"] * len(id_to_delete))
-        sql = "DELETE FROM college WHERE `code` IN ({})".format(
-            placeholders)
-        # sql2 = " IN ({})".format(placeholders)
-        cursor.execute(sql, tuple(id_to_delete))
-        mysql.connection.commit()
+        try:
+            # id_to_delete = ["John Doe", "Jane Doe"]
+            cursor = mysql.connection.cursor()
+            if not isinstance(id_to_delete, (list, tuple, numpy.ndarray)):
+                id_to_delete = [id_to_delete]
+            placeholders = ",".join(["%s"] * len(id_to_delete))
+            sql = "DELETE FROM college WHERE `code` IN ({})".format(
+                placeholders)
+            # sql2 = " IN ({})".format(placeholders)
+            cursor.execute(sql, tuple(id_to_delete))
+            mysql.connection.commit()
+            return True
+        except Exception as e:
+            return e
         
     # @classmethod
     def delete(self,code):    

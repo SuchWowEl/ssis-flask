@@ -40,13 +40,13 @@ def colleges_add():
     except Exception as e:
         return jsonify({'response':str(e)})
     
-@bp.route('/colleges/edit/', methods=['POST'])
+@bp.route('/colleges/edit/', methods=['GET'])
 def colleges_edit_view():
     print("colleges_edit_view called")
-    data = request.get_json()
-    collegeInfo = college_interface.retrieve_college(data["code"])
+    code_to_edit = request.args.getlist('code')
+    collegeInfo = college_interface.retrieve_college(code_to_edit[0])
     global collegecode 
-    collegecode = data["code"]
+    collegecode = code_to_edit[0]
     return render_template("college/edit.html", info=collegeInfo)
 
 @bp.route('/colleges/editcollege/', methods=['POST'])
@@ -68,8 +68,10 @@ def colleges_delete():
     print(data)
     list = data["list"]
     print("list is " + str(list))
-    college_interface.delete_rows(list)
-    return redirect(url_for("colleges.colleges"))
+    response = college_interface.delete_rows(list)
+    if response != True:
+        response = str(response)
+    return jsonify({"response": response})
 
 @bp.route('/colleges/search/', methods=['GET'])
 def colleges_search():

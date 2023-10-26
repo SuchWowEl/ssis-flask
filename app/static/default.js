@@ -182,29 +182,29 @@ search_filter = "";
     console.log(tableUrl);
     tableUrl = "/" + event.target.id + "/";
     var content = document.getElementById("content");
-search_filter = "";
+    search_filter = "";
 
     // Perform an AJAX load operation (you may need to use another approach like fetch or XMLHttpRequest)
-fetch(tableUrl)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Network response was not ok: ${response.status}`);
-        }
-        return response.text();
-      })
-      .then((data) => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(data, "text/html");
-        if (doc.querySelector("parsererror")) {
-          console.error("HTML validation error");
-        } else {
-          content.innerHTML = data;
-          tablePick();
-        }
-      })
-      .catch((error) => {
-        console.error("Fetch error:", error);
-      });
+    fetch(tableUrl)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.status}`);
+          }
+          return response.text();
+        })
+        .then((data) => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(data, "text/html");
+          if (doc.querySelector("parsererror")) {
+            console.error("HTML validation error");
+          } else {
+            content.innerHTML = data;
+            tablePick();
+          }
+        })
+        .catch((error) => {
+          console.error("Fetch error:", error);
+        });
   }
 
   function searchTable(event){
@@ -219,7 +219,7 @@ fetch(tableUrl)
     };
     var queryString = $.param(formData);
     $.ajax({
-      url: tableUrl + "search/?" + queryString,
+      url: searchUrl + "?" + queryString,
       type: "GET",
       success: function(response){
         if (response["response"]===true){
@@ -396,10 +396,10 @@ fetch(tableUrl)
     document.body.appendChild(newDiv);
   }
 
-  function deleteStudentCall() {
-    console.log("tab @ deleteStudentCall:" + tableUrl);
-    deleteUrl = tableUrl + "delete";
-        const csrfToken = document
+  function deleteCall(event) {
+    console.log("tab @ deleteCall:" + tableUrl);
+    deleteUrl = tableUrl + "delete/";
+    const csrfToken = document
       .querySelector("meta[name=csrf-token]")
       .getAttribute("content");
     const formData = {
@@ -407,26 +407,25 @@ fetch(tableUrl)
     };
     console.log("formData is " + JSON.stringify(formData, null, 2));
 
-    fetch(deleteUrl, {
-      method: "POST",
+    $.ajax({
+      type: "POST",
+      url: deleteUrl,
       headers: {
         "Content-Type": "application/json",
         "X-CSRFToken": csrfToken,
       },
-      body: JSON.stringify(formData),
-    })
-      .then((data) => {
-        if(data){
+      data: JSON.stringify(formData),
+      success: function(data) {
+        console.log("before if-else");
+        console.log(data);
+        if(data['response']===true){
           const element = document.getElementById(tableUrl.slice(1, -1));
-
-          // Check if the element exists (not null)
           if (element) {
-            // Programmatically trigger a click event
             element.click();
           }
         }
-        else alert(data);
-      });
+        else alert(data["response"]);
+      }});
 
     event.preventDefault();
   }
@@ -502,7 +501,7 @@ fetch(tableUrl)
     //   .setAttribute("data-modal-toggle", "info-popup");
     document
       .getElementById("proceed-to-delete")
-      .addEventListener("click", deleteStudentCall);
+      .addEventListener("click", deleteCall);
 
     document
       .querySelectorAll(".remove-custom-backdrop")
@@ -554,20 +553,25 @@ fetch(tableUrl)
             code: leftmostData
           };
         }
+        var queryString = $.param(formData);
         console.log("formData is " + JSON.stringify(formData, null, 2));
-        const request = new XMLHttpRequest();
-        request.open("POST", editUrl);
-        request.onload = function () {
-          document.getElementById("content").innerHTML = this.responseText;
+        $(content).load(editUrl+"?"+queryString,function(){
           addEntry("edit");
-        };
-        request.setRequestHeader("Content-type", "application/json");
-        const csrfToken = document
-          .querySelector("meta[name=csrf-token]")
-          .getAttribute("content");
-        request.setRequestHeader("X-CSRFToken", csrfToken);
-        request.send(JSON.stringify(formData));
+        });
         event.preventDefault();
+        // const request = new XMLHttpRequest();
+        // request.open("POST", editUrl);
+        // request.onload = function () {
+        //   document.getElementById("content").innerHTML = this.responseText;
+        //   addEntry("edit");
+        // };
+        // request.setRequestHeader("Content-type", "application/json");
+        // const csrfToken = document
+        //   .querySelector("meta[name=csrf-token]")
+        //   .getAttribute("content");
+        // request.setRequestHeader("X-CSRFToken", csrfToken);
+        // request.send(JSON.stringify(formData));
+        // event.preventDefault();
       }
     });
   }
