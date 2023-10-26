@@ -83,15 +83,28 @@ def students_delete():
         response = str(response)
     return response
 
-@bp.route('/students/search/', methods=['POST'])
+# @bp.route('/students/search/', methods=['POST'])
+# def students_search():
+#     # data = request.get_json()
+#     data = request.get_json()
+#     print("data:")
+#     print(data)
+#     global search_header, search_value
+#     search_header, search_value = data["header"], data["search"]
+#     return redirect(url_for("students.students"))
+
+@bp.route('/students/search/', methods=['GET'])
 def students_search():
     # data = request.get_json()
-    data = request.get_json()
-    print("data:")
-    print(data)
-    global search_header, search_value
-    search_header, search_value = data["header"], data["search"]
-    return redirect(url_for("students.students"))
+    try:
+        header = request.args.getlist('header')
+        search = request.args.getlist('search')
+        print(f"header: {header[0]}, search: {search[0]}")
+        global search_header, search_value
+        search_header, search_value = header[0], search[0]
+        return jsonify({'response': True})
+    except Exception as e:
+        return jsonify({'response': e})
 
 @bp.route('/students/verify/<id>', methods=["GET"])
 def students_id_confirm(id):

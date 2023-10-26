@@ -71,15 +71,18 @@ def colleges_delete():
     college_interface.delete_rows(list)
     return redirect(url_for("colleges.colleges"))
 
-@bp.route('/colleges/search/', methods=['POST'])
+@bp.route('/colleges/search/', methods=['GET'])
 def colleges_search():
     # data = request.get_json()
-    data = request.get_json()
-    print("data:")
-    print(data)
-    global search_header, search_value
-    search_header, search_value = data["header"], data["search"]
-    return redirect(url_for("colleges.colleges"))
+    try:
+        header = request.args.getlist('header')
+        search = request.args.getlist('search')
+        print(f"header: {header[0]}, search: {search[0]}")
+        global search_header, search_value
+        search_header, search_value = header[0], search[0]
+        return jsonify({'response': True})
+    except Exception as e:
+        return jsonify({'response': e})
 
 @bp.route('/colleges/verify/<id>', methods=["GET"])
 def colleges_id_confirm(id):

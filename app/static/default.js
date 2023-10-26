@@ -109,15 +109,38 @@ search_filter = "";
             header: search_filter,
             search: genderChoice
           };
-          var xhr = new XMLHttpRequest();
-          xhr.open("POST",tableUrl + "search/", true);
-          xhr.setRequestHeader("Content-Type", "application/json");
-          xhr.setRequestHeader("X-CSRFToken", csrfToken);
-          xhr.onload = function () {
-            document.getElementById("content").innerHTML = xhr.responseText;
-            tablePick();
-          };
-          xhr.send(JSON.stringify(formData));
+          var queryString = $.param(formData);
+          $.ajax({
+            url: tableUrl + "search/?" + queryString,
+            type: "GET",
+            success: function(response){
+              if (response["response"]===true){
+                console.log("search success");
+                const element = document.getElementById(tableUrl.slice(1, -1));
+
+                // Check if the element exists (not null)
+                if (element) {
+                  // Programmatically trigger a click event
+                  element.click();
+                }
+              }
+              else {
+                console.log("Failed");
+                alert(response["response"]);
+              }
+            }
+          });
+          event.preventDefault();
+          
+          // var xhr = new XMLHttpRequest();
+          // xhr.open("POST",tableUrl + "search/", true);
+          // xhr.setRequestHeader("Content-Type", "application/json");
+          // xhr.setRequestHeader("X-CSRFToken", csrfToken);
+          // xhr.onload = function () {
+          //   document.getElementById("content").innerHTML = xhr.responseText;
+          //   tablePick();
+          // };
+          // xhr.send(JSON.stringify(formData));
         });
         document.getElementById("popupDropdownButton").addEventListener("click",filterDropdownChecker);
         document.getElementById("popupDropdownBox-choices").addEventListener("click", function(event) {
@@ -135,17 +158,6 @@ search_filter = "";
             filterDropdownChecker();
           }
         });
-        // var toast = document.getElementById("toast-danger");
-        // var closeButton = toast.querySelector("[data-dismiss-target]");
-
-        // toast.classList.add("show");
-        // toast.classList.remove("hidden");
-
-        // closeButton.addEventListener("click", function () {
-        //     console.log("closed");
-        //     toast.classList.remove("show");
-        //     toast.classList.add("hidden");
-        // });
       });
     }
     else{
@@ -198,38 +210,35 @@ fetch(tableUrl)
   function searchTable(event){
     console.log("SEARCHTABLE");
     searchUrl = tableUrl + "search/";
-    const csrfToken = document
-      .querySelector("meta[name=csrf-token]")
-      .getAttribute("content");
+    // const csrfToken = document
+    //   .querySelector("meta[name=csrf-token]")
+    //   .getAttribute("content");
     const formData = {
       header: search_filter,
       search: document.getElementById("search-dropdown").value
     };
-    var xhr = new XMLHttpRequest();
-xhr.open("POST", searchUrl, true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.setRequestHeader("X-CSRFToken", csrfToken);
-    xhr.onload = function () {
-      document.getElementById("content").innerHTML = xhr.responseText;
-      tablePick();
-    };
-    xhr.send(JSON.stringify(formData));
+    var queryString = $.param(formData);
+    $.ajax({
+      url: tableUrl + "search/?" + queryString,
+      type: "GET",
+      success: function(response){
+        if (response["response"]===true){
+          console.log("search success");
+          const element = document.getElementById(tableUrl.slice(1, -1));
+
+          // Check if the element exists (not null)
+          if (element) {
+            // Programmatically trigger a click event
+            element.click();
+          }
+        }
+        else {
+          console.log("Failed");
+          alert(response["response"]);
+        }
+      }
+    });
     event.preventDefault();
-    
-    // xhr.open("POST", searchUrl, true);
-    // xhr.setRequestHeader("Content-Type", "application/json");
-    // xhr.setRequestHeader("X-CSRFToken", csrfToken);
-    // xhr.onload = function () {
-    // if (xhr.status === 200) {
-    //     document.getElementById("table-div").innerHTML = xhr.responseText;
-    // } else {
-    //     console.error("Network response was not ok: " + xhr.status);
-    // }
-    // };
-    // xhr.onerror = function () {
-    // console.error("Request failed");
-    // };
-    // xhr.send(JSON.stringify(formData));
   }
 
   function toggleRow(event) {
@@ -360,11 +369,13 @@ xhr.open("POST", searchUrl, true);
   }
   
     function closingDeleteDialog() {
-    console.log("CLOSING DIALOG");
-    const divToDelete = document.querySelector("[modal-backdrop]");
-    document.getElementById("info-popup").classList.add("hidden");
-    divToDelete.remove();
-  }
+      console.log("CLOSING DIALOG");
+      const divToDelete = document.querySelector("[modal-backdrop]");
+      if (divToDelete !== null) {
+        document.getElementById("info-popup").classList.add("hidden");
+        divToDelete.remove();
+      }
+    }
 
   function deleteStudentDialog() {
     console.log("deleteStudentDialog called");
@@ -500,20 +511,16 @@ xhr.open("POST", searchUrl, true);
           tab.addEventListener("click", closingDeleteDialog);
       });
 
+    //GET for searchbar and table
     document.getElementById("add_entry").addEventListener("click", function () {
       var addUrl = tableUrl + "/add/";
       var content = document.getElementById("content");
 
-      // Perform an AJAX load operation (you may need to use another approach like fetch or XMLHttpRequest)
-      var xhr = new XMLHttpRequest();
-      xhr.onload = function () {
-        content.innerHTML = this.responseText;
+      $(content).load(addUrl, function(){
         addEntry("add");
-      };
-      xhr.open("GET", addUrl, true);
-      xhr.send();
-    });
+      });
 
+    });
     // Perform an AJAX load operation (you may need to use another approach like fetch or XMLHttpRequest)
     /*var xhr = new XMLHttpRequest();
       xhr.onload = function () {

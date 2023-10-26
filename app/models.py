@@ -74,7 +74,7 @@ class Student:
         print("students triggered")
 
         sql = ""
-        if(header != "gender"):
+        if(not header in ["gender", "course"]):
             sql = f"SELECT * \
                 FROM student \
                 WHERE `{header}` LIKE '%{value}%';"
