@@ -63,7 +63,13 @@ class Student:
         cursor = mysql.connection.cursor()
         print("students triggered")
 
-        sql = "SELECT * from student"
+        sql = f"SELECT student.id, student.firstname, student.lastname, student.course, student.`year`, student.gender, \
+                college.`code` \
+                FROM ssis.student \
+                INNER JOIN ssis.course \
+                ON student.course = course.`code` \
+                INNER JOIN ssis.college \
+                ON college.`code` = course.`college`"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
@@ -74,14 +80,33 @@ class Student:
         print("students triggered")
 
         sql = ""
-        if(not header in ["gender", "course"]):
-            sql = f"SELECT * \
-                FROM student \
-                WHERE `{header}` LIKE '%{value}%';"
+        if  (header == "code"):
+            sql = f"SELECT student.id, student.firstname, student.lastname, student.course, student.`year`, student.gender, \
+                    college.`code` \
+                    FROM ssis.student \
+                    INNER JOIN ssis.course \
+                    ON student.course = course.`code` \
+                    INNER JOIN ssis.college \
+                    ON college.`code` = course.`college` \
+                    WHERE college.`code` LIKE '%{value}%';"
+        elif (not header in ["gender", "course"]):
+            sql = f"SELECT student.id, student.firstname, student.lastname, student.course, student.`year`, student.gender, \
+                    college.`code` \
+                    FROM ssis.student \
+                    INNER JOIN ssis.course \
+                    ON student.course = course.`code` \
+                    INNER JOIN ssis.college \
+                    ON college.`code` = course.`college` \
+                    WHERE `{header}` LIKE '%{value}%';"
         else:
-            sql = f"SELECT * \
-                FROM student \
-                WHERE `{header}` = '{value}';"
+            sql = f"SELECT student.id, student.firstname, student.lastname, student.course, student.`year`, student.gender, \
+                    college.`code` \
+                    FROM ssis.student \
+                    INNER JOIN ssis.course \
+                    ON student.course = course.`code` \
+                    INNER JOIN ssis.college \
+                    ON college.`code` = course.`college` \
+                    WHERE `{header}` = '{value}';"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result

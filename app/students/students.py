@@ -113,10 +113,11 @@ def students_table():
     student_table = ""
     if(not search_header in ["Filter by...", ""]):
         student_table = student_interface.search(search_header, search_value)
-        student_table.insert(0, student_interface.headers())
     else:
         student_table = student_interface.all()
-        student_table.insert(0, student_interface.headers())
+    result = student_interface.headers()
+    to_insert = (result[0], result[1], result[2], result[3], result[4], result[5], "college")
+    student_table.insert(0, to_insert)
     return student_table
 
 @bp.route('/students/gender/retriever/')

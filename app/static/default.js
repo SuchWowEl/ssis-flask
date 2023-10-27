@@ -1,8 +1,10 @@
 
   //$(document).ready();
   tableUrl = "";// e.g. "/students/"
-search_filter = "";
+  search_filter = "";
   let selectedStudent = [];
+  recently_added = "";
+
 
   // Function to toggle the visibility of dropdown-blocks
   function toggleDropdown() {
@@ -194,7 +196,7 @@ search_filter = "";
         .catch((error) => {
           console.error("Fetch error:", error);
         });
-  }
+      }
 
   function searchTable(event){
     console.log("SEARCHTABLE");
@@ -405,6 +407,7 @@ search_filter = "";
           if (element) {
             element.click();
           }
+          alert(tableUrl.slice(1, -2)+ ((selectedStudent.length>1) ? "s have" : " has" )+" been deleted");
         }
         else alert(data["response"]);
       }});
@@ -590,6 +593,7 @@ search_filter = "";
             if (element) {
               // Programmatically trigger a click event
               $(element).click();
+              alert(tableUrl.slice(1, -2)+" has been successfully "+type+"ed");
             }
           }
           else{
