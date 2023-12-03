@@ -37,7 +37,7 @@ CREATE TABLE `college` (
 
 LOCK TABLES `college` WRITE;
 /*!40000 ALTER TABLE `college` DISABLE KEYS */;
-INSERT INTO `college` VALUES ('CASS','College of Arts and Science'),('CCS','College of Computer Science'),('CEBA','College of Business Administration & Accountancy'),('COE','College of Education'),('COET','College of Engineering and Technology'),('CON','College of Nursing');
+INSERT INTO `college` VALUES ('CASS','College Of Arts And Social Sciences'),('CCS','College of Computer Science'),('CEBA','College of Business Administration & Accountancy'),('COE','College of Education'),('COET','College of Engineering and Technology'),('CON','College of Nursing');
 /*!40000 ALTER TABLE `college` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -64,7 +64,7 @@ CREATE TABLE `course` (
 
 LOCK TABLES `course` WRITE;
 /*!40000 ALTER TABLE `course` DISABLE KEYS */;
-INSERT INTO `course` VALUES ('BSCA','Bachelor of Science in Computer Applications','CCS'),('BSCS','Bachelor of Science in Computer Science','CCS'),('BSIS','Bachelor of Science in Information Systems','CCS');
+INSERT INTO `course` VALUES ('BS Psych','Bachelor of Science in Psychology','CASS'),('BSCA','Bachelor of Science in Computer Applications','CCS'),('BSChE','Bachelor of Science in Chemical Engineering','COET'),('BSCS','Bachelor of Science in Computer Science','CCS'),('BSECE','Bachelor of Science in Electrical and Communications Engineering','COET'),('BSIS','Bachelor of Science in Information Systems','CCS');
 /*!40000 ALTER TABLE `course` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -94,7 +94,7 @@ CREATE TABLE `student` (
 
 LOCK TABLES `student` WRITE;
 /*!40000 ALTER TABLE `student` DISABLE KEYS */;
-INSERT INTO `student` VALUES ('1111-1111','Chet','Holmgren','BSCA',1,'Others'),('2021-0441','Kobe','Bryant','BSCS',3,'Others'),('2021-4513','JOHNCENA','Doe','BSIS',3,'Others'),('2021-9999','earvin','johnson','BSCS',1,'male'),('2023-0000','aaaaaaaa','abbbbbbbbb','BSCA',1,'Others');
+INSERT INTO `student` VALUES ('1111-1111','Chet','Holmgren','BSCA',3,'Others'),('2021-0440','Albert','Einsten','BSECE',2,'Others'),('2021-0441','Kobe','Bryant','BSCS',3,'Male'),('2021-1201','John','Doe','BS Psych',1,'Male'),('2021-4513','Johnny','Bravo','BSIS',3,'Female'),('2022-0028','Sophia','Anderson','BSCA',2,'Female'),('2022-0057','Daniel','Martinez','BS Psych',1,'Male'),('2022-0118','Ava','Johnson','BSIS',3,'Female'),('2022-0122','Olivia','Harris','BSCS',1,'Female'),('2022-0141','Matthew','Smith','BSECE',2,'Male'),('2022-0202','Jane','Smith','BSCA',2,'Female'),('2022-0219','Oliver','Lee','BS Psych',1,'Male'),('2022-0230','Alexander','Brown','BS Psych',1,'Male'),('2022-0234','Olivia','Harris','BSCS',1,'Female'),('2022-0236','Mia','Rodriguez','BSIS',3,'Female'),('2022-0238','Avery','Taylor','BSCA',2,'Female'),('2022-0243','Michael','Johnson','BSChE',3,'Male'),('2022-0306','Emily','Lee','BSIS',3,'Female'),('2022-0314','Isabella','Taylor','BSCA',2,'Female'),('2022-0316','Sophia','Garcia','BSCS',1,'Female'),('2022-0343','Ethan','White','BS Psych',1,'Male'),('2022-0428','Sophia','Garcia','BSCS',1,'Female'),('2022-0513','Liam','Brown','BS Psych',1,'Male'),('2022-0539','Daniel','Moore','BSChE',3,'Male'),('2022-0544','Alice','Wilson','BSCS',1,'Female'),('2022-0642','Scarlett','Brown','BSIS',3,'Others'),('2022-0820','Emma','White','BSCA',2,'Female'),('2022-1009','Noah','Harris','BSChE',3,'Male'),('2022-1015','Mason','Moore','BSChE',3,'Male'),('2022-1017','Elijah','Smith','BSECE',2,'Male'),('2022-1033','Jack','Martinez','BSChE',3,'Male'),('2022-1044','Chloe','Martinez','BSCA',2,'Female'),('2022-1226','Mia','Smith','BSCA',2,'Female'),('2022-2023','James','Gonzalez','BSECE',2,'Others'),('2022-2024','Charlotte','Rodriguez','BSIS',3,'Female'),('2022-2037','Samuel','Smith','BS Psych',1,'Male'),('2022-3010','Olivia','Gonzalez','BSCS',1,'Female'),('2022-3011','Ethan','Rodriguez','BSECE',2,'Male'),('2022-3032','Ella','Johnson','BSCA',2,'Female'),('2022-4019','Ava','Smith','BSIS',3,'Female'),('2022-4225','Benjamin','Brown','BS Psych',1,'Male'),('2022-5035','Jackson','Gonzalez','BSECE',2,'Others'),('2022-7027','Lucas','Moore','BSChE',3,'Male'),('2022-7040','Ava','Garcia','BSCS',1,'Female'),('2022-8029','Henry','White','BSECE',2,'Male'),('2022-8030','Amelia','Smith','BSIS',3,'Others'),('2022-9021','William','Martinez','BSChE',3,'Male'),('2022-9205','David','Brown','BSECE',2,'Male'),('2321-3213','bert','hellow','BS Psych',2,'Male'),('3123-6593','aaaaaaaa','sa','BS Psych',2,'Male');
 /*!40000 ALTER TABLE `student` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
