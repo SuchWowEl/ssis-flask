@@ -553,6 +553,33 @@
         .getElementById("formDropdownBox-choices")
         .addEventListener("click", formDropdownBlocksClickHandler);
 
+      function previewFile() {
+        console.log("PREVIEW PRESSED")
+        var preview = document.getElementById('profile-image');
+        var file    = document.getElementById('profile-image-upload').files[0];
+        var reader  = new FileReader();
+      
+        reader.addEventListener("load", function () {
+          preview.style.height = '150px';
+          preview.style.width = '150px';
+          preview.style.objectFit = 'cover';
+          preview.src = reader.result;
+        }, false);
+      
+        if (file) {
+          reader.readAsDataURL(file);
+        }
+      }
+      
+      document
+        .getElementById("profile-image1")
+        .addEventListener("click", function() {
+            $('#profile-image-upload').click();
+        });
+      document
+        .getElementById("profile-image-upload")
+        .addEventListener("change", previewFile);
+
     //}
 
     function formValidator(formData){
