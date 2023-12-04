@@ -2,8 +2,9 @@ print('eyo')
 from flask import Flask, render_template, jsonify, request
 from flask_mysql_connector import MySQL
 # from flask_bootstrap import Bootstrap
-from config import DB_USERNAME, DB_PASSWORD, DB_NAME, DB_HOST, SECRET_KEY, BOOTSTRAP_SERVE_LOCAL
+from config import DB_USERNAME, DB_PASSWORD, DB_NAME, DB_HOST, SECRET_KEY, BOOTSTRAP_SERVE_LOCAL, API_KEY, API_SECRET, CLOUD_NAME
 from flask_wtf.csrf import CSRFProtect
+import cloudinary 
 
 mysql = MySQL()
 # bootstrap = Bootstrap()
@@ -17,6 +18,12 @@ def create_app(test_config=None):
         MYSQL_DATABASE=DB_NAME,
         MYSQL_HOST=DB_HOST,
         #BOOTSTRAP_SERVE_LOCAL=BOOTSTRAP_SERVE_LOCAL
+    )
+    
+    cloudinary.config(
+        CLOUD_NAME = CLOUD_NAME, 
+        API_KEY=API_KEY, 
+        API_SECRET=API_SECRET
     )
     # bootstrap.init_app(app)
     mysql.init_app(app)
