@@ -1,6 +1,7 @@
 app/__pycache__/*
 __pycache__/*
 .gitignore
+.venv
 .env
 .flaskenv
 .vscode/*
