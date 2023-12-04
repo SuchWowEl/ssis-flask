@@ -8,7 +8,7 @@ class Student:
         cursor = mysql.connection.cursor()
         print("a student triggered")
 
-        sql = f"SELECT * from student where (`id` = '{id}')"
+        sql = f"SELECT * from ssis.student where (`id` = '{id}')"
         cursor.execute(sql)
         result = cursor.fetchone() 
         print("retreived student from model:")
@@ -45,7 +45,7 @@ class Student:
         cursor = mysql.connection.cursor()
         
         try:
-            sql = f"UPDATE `student` \
+            sql = f"UPDATE `ssis`.`student` \
                     SET `id` = '{student_info['id']}', `firstname` = '{student_info['firstname']}', `lastname` = '{student_info['lastname']}', \
                     `course` = '{student_info['course']}', `year` = {student_info['year']}, `gender` = '{student_info['gender']}' \
                     WHERE `id` = '{studentID}'"
@@ -114,7 +114,7 @@ class Student:
     def studentids(self):
         cursor = mysql.connection.cursor()
 
-        sql = "SELECT id from student"
+        sql = "SELECT id from `ssis`.`student`"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
@@ -141,7 +141,7 @@ class Student:
             if not isinstance(id_to_delete, (list, tuple, numpy.ndarray)):
                 id_to_delete = [id_to_delete]
             placeholders = ",".join(["%s"] * len(id_to_delete))
-            sql = "DELETE FROM student WHERE `id` IN ({})".format(
+            sql = "DELETE FROM `ssis`.`student` WHERE `id` IN ({})".format(
                 placeholders)
             # sql2 = " IN ({})".format(placeholders)
             cursor.execute(sql, tuple(id_to_delete))
@@ -154,7 +154,7 @@ class Student:
     def delete(self,id):    
         try:
             cursor = mysql.connection.cursor()
-            sql = f"DELETE from student where id= {id}"
+            sql = f"DELETE from `ssis`.`student` where id= {id}"
             cursor.execute(sql)
             mysql.connection.commit()
             return True
@@ -175,7 +175,7 @@ class Course:
         cursor = mysql.connection.cursor()
         print("a course triggered")
 
-        sql = f"SELECT * from course where (`code` = '{code}')"
+        sql = f"SELECT * from `ssis`.`course` where (`code` = '{code}')"
         print(sql)
         cursor.execute(sql)
         result = cursor.fetchone() 
@@ -199,7 +199,7 @@ class Course:
         print()
         cursor = mysql.connection.cursor()
 
-        sql = f"INSERT INTO `course` (`code`, `name`, `college`) \
+        sql = f"INSERT INTO `ssis`.`course` (`code`, `name`, `college`) \
        VALUES ('{course_info['code']}', '{course_info['name']}', '{course_info['college']}')"
 
         cursor.execute(sql)
@@ -210,7 +210,7 @@ class Course:
             cursor = mysql.connection.cursor()
             
             # UPDATE `ssis`.`student` SET `firstname` = 'asda' WHERE (`id` = '2021-0001');
-            sql = f"UPDATE `course` \
+            sql = f"UPDATE `ssis`.`course` \
                     SET `code` = '{course_info['code']}', `name` = '{course_info['name']}', `college` = '{course_info['college']}' \
                     WHERE `code` = '{courseCode}'"
 
@@ -223,7 +223,7 @@ class Course:
     def all(self):
         cursor = mysql.connection.cursor()
 
-        sql = "SELECT * from course"
+        sql = "SELECT * from ssis.course"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
@@ -236,11 +236,11 @@ class Course:
         sql = ""
         if(header != "gender"):
             sql = f"SELECT * \
-                FROM course \
+                FROM `ssis`.`course` \
                 WHERE `{header}` LIKE '%{value}%';"
         else:
             sql = f"SELECT * \
-                FROM course \
+                FROM `ssis`.`course` \
                 WHERE `{header}`  '{value}';"
         cursor.execute(sql)
         result = cursor.fetchall()
@@ -250,7 +250,7 @@ class Course:
     def coursecodes(self):
         cursor = mysql.connection.cursor()
 
-        sql = "SELECT code from course"
+        sql = "SELECT code from `ssis`.`course`"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
@@ -277,7 +277,7 @@ class Course:
             if not isinstance(id_to_delete, (list, tuple, numpy.ndarray)):
                 id_to_delete = [id_to_delete]
             placeholders = ",".join(["%s"] * len(id_to_delete))
-            sql = "DELETE FROM course WHERE `code` IN ({})".format(
+            sql = "DELETE FROM `ssis`.`course` WHERE `code` IN ({})".format(
                 placeholders)
             # sql2 = " IN ({})".format(placeholders)
             cursor.execute(sql, tuple(id_to_delete))
@@ -290,7 +290,7 @@ class Course:
     def delete(self,id):    
         try:
             cursor = mysql.connection.cursor()
-            sql = f"DELETE from course where id= {id}"
+            sql = f"DELETE from `ssis`.`course` where id= {id}"
             cursor.execute(sql)
             mysql.connection.commit()
             return True
@@ -309,7 +309,7 @@ class College:
         cursor = mysql.connection.cursor()
         print("a college triggered")
 
-        sql = f"SELECT * from college where (`code` = '{code}')"
+        sql = f"SELECT * from `ssis`.`college` where (`code` = '{code}')"
         cursor.execute(sql)
         result = cursor.fetchone() 
         print("retreived college from model:")
@@ -331,7 +331,7 @@ class College:
     def add(self, college_info):
         cursor = mysql.connection.cursor()
 
-        sql = f"INSERT INTO `college` (`code`, `name`) \
+        sql = f"INSERT INTO `ssis`.`college` (`code`, `name`) \
        VALUES ('{college_info['code']}', '{college_info['name']}')"
 
         cursor.execute(sql)
@@ -342,7 +342,7 @@ class College:
             cursor = mysql.connection.cursor()
             
             # UPDATE `ssis`.`student` SET `firstname` = 'asda' WHERE (`id` = '2021-0001');
-            sql = f"UPDATE `college` \
+            sql = f"UPDATE `ssis`.`college` \
             SET `code` = '{college_info['code']}', `name` = '{college_info['name']}' \
             WHERE `code` = '{collegeCode}'"
 
@@ -355,7 +355,7 @@ class College:
     def collegecodes(self):
         cursor = mysql.connection.cursor()
 
-        sql = "SELECT code from college"
+        sql = "SELECT code from `ssis`.`college`"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
@@ -365,7 +365,7 @@ class College:
     def all(self):
         cursor = mysql.connection.cursor()
 
-        sql = "SELECT * from college"
+        sql = "SELECT * from `ssis`.`college`"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
@@ -376,7 +376,7 @@ class College:
         print("courses search")
 
         sql = f"SELECT * \
-            FROM college \
+            FROM `ssis`.`college` \
             WHERE `{header}` LIKE '%{value}%';"
         cursor.execute(sql)
         result = cursor.fetchall()
@@ -404,7 +404,7 @@ class College:
             if not isinstance(id_to_delete, (list, tuple, numpy.ndarray)):
                 id_to_delete = [id_to_delete]
             placeholders = ",".join(["%s"] * len(id_to_delete))
-            sql = "DELETE FROM college WHERE `code` IN ({})".format(
+            sql = "DELETE FROM `ssis`.`college` WHERE `code` IN ({})".format(
                 placeholders)
             # sql2 = " IN ({})".format(placeholders)
             cursor.execute(sql, tuple(id_to_delete))
@@ -417,7 +417,7 @@ class College:
     def delete(self,code):    
         try:
             cursor = mysql.connection.cursor()
-            sql = f"DELETE from college where code= {code}"
+            sql = f"DELETE from `ssis`.`college` where code= {code}"
             cursor.execute(sql)
             mysql.connection.commit()
             return True
