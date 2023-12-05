@@ -3,8 +3,11 @@
   <div id="edit_page" class="relative h-[8.333333%] w-full flex justify-center"></div>
   <div class="bg-gray-100 w-1/2 h-[75%] rounded-md mx-auto">
     <!--onsubmit="addStudent()" action="/students/addstudent/"-->
+    {%set img_url = "static/default_pic.svg"%}
     {% if info is not defined or info == '' %} {% set info =
-    ['', '', '', '', '', ''] %} {% endif %}
+    ['', '', '', '', '', '', ''] %}
+    {% else %} {%set img_url = info[6]%}
+    {% endif %}
     <form
       class="h-full"
       id="add-edit-form"
@@ -15,7 +18,9 @@
         <div class="flex flex-row">
           <div class="w-1/3 px-5 flex justify-center align-middle">
             <div id="profile-image1" class="border-solid bg-gray-500 rounded-md border-gray-500 border-2 min-w-[150px]">
-              <img alt="User Pic" id="profile-image" src="static/default_pic.svg" height="150" width="150">
+              <img alt="User Pic" id="profile-image" class="object-cover w-[150px] h-[150px]"
+              src="{{img_url}}"
+              height="150" width="150">
               <input id="profile-image-upload" class="hidden" type="file">
             </div>
           </div>
