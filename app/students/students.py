@@ -2,6 +2,8 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for, jsonify
 )
 from werkzeug.exceptions import abort
+from cloudinary.uploader import upload
+from cloudinary.utils import cloudinary_url
 
 # from flaskr.auth import login_required
 # from flaskr.db import get_db
@@ -33,11 +35,20 @@ def students_add_view():
 def students_add():
     print("students_add called")
     data = request.get_json()
-    print("form: " + str(data))
+    #print("form: " + str(data))
     try:
+        pic_link = data['picture']
+        if pic_link:
+            upload_result = upload(pic_link, folder="SSIS", resource_type='image')
+            secure_url = upload_result['secure_url']
+        else:
+            secure_url = None
+        data['picture'] = secure_url
+        print(f"secure_url: {secure_url}")
         student_interface.add(data)
         return jsonify({'response':True})
     except Exception as e:
+        print(str(e))
         return jsonify({'response':str(e)})
     
 @bp.route('/students/edit/', methods=['GET'])
@@ -59,6 +70,15 @@ def students_edit():
     global studentid 
     print("students_edit called")
     data = request.get_json()
+    
+    pic_link = data['picture']
+    if pic_link:
+        upload_result = upload(pic_link, folder="SSIS", resource_type='image')
+        secure_url = upload_result['secure_url']
+    else:
+        secure_url = None
+    data['picture'] = secure_url
+    
     print("form: " + str(data))
     response = student_interface.update(data, studentid)
     studentid = ""
@@ -124,3 +144,7 @@ def students_table():
 def gender_retriever():
     genders = ["Male", "Female", "Others"]
     return render_template("filter_dropdown.html", content = genders)
+
+@bp.route('/students/loading')
+def spinner():
+    return render_template("student/uploading.html")
