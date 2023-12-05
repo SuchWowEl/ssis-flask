@@ -616,6 +616,11 @@
             console.log("POST SUCCESSFUL");
             var element = document.getElementById(tableUrl.slice(1, -1));
 
+            if(tableUrl == "/students/"){
+              console.log("loading removed");
+              $('.loading').remove();
+            }
+
             // Check if the element exists (not null)
             if (element) {
               // Programmatically trigger a click event
@@ -639,7 +644,20 @@
 
         var formData = {};
         if (tableUrl=="/students/"){
+          $.ajax({
+              url: tableUrl+'loading',  // Replace with your Flask route
+              method: 'GET',
+              success: function(data) {
+                  // Append the dynamic content to the modal
+                  console.log("modal appended")
+                  $('#modal').append(data);
+              },
+              error: function(error) {
+                  console.error('Error fetching dynamic content:', error);
+              }
+          });
           formData = {
+            picture: document.getElementById('profile-image').getAttribute('src'),
             id: $("#id").val().trim(),
             firstname: $("#firstname").val(),
             lastname: $("#lastname").val(),
