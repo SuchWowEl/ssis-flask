@@ -6,7 +6,10 @@
     {%set img_url = "static/default_pic.svg"%}
     {% if info is not defined or info == '' %} {% set info =
     ['', '', '', '', '', '', ''] %}
-    {% else %} {%set img_url = info[6]%}
+    {% else %} 
+      {% if info[6] == "" %}  {% set img_url = "static/default_pic.svg" %}
+      {% else %} {%set img_url = info[6]%}
+      {% endif %}
     {% endif %}
     <form
       class="h-full"
@@ -21,7 +24,7 @@
               <img alt="User Pic" id="profile-image" class="object-cover w-[150px] h-[150px]"
               src="{{img_url}}"
               height="150" width="150">
-              <input id="profile-image-upload" class="hidden" type="file">
+              <input id="profile-image-upload" accept="image/*" class="hidden" type="file">
             </div>
           </div>
           <div class="w-2/3">
