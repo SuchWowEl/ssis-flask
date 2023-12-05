@@ -33,9 +33,9 @@ class Student:
         
         print(student_info)
 
-        sql = f"INSERT INTO `student` (`id`, `firstname`, `lastname`, `course`, `year`, `gender`) \
+        sql = f"INSERT INTO `ssis`.`student` (`id`, `firstname`, `lastname`, `course`, `year`, `gender`, `profile_pic`) \
        VALUES ('{student_info['id']}', '{student_info['firstname']}', '{student_info['lastname']}', '{student_info['course']}', \
-               '{student_info['year']}', '{student_info['gender']}')"
+               '{student_info['year']}', '{student_info['gender']}', '{student_info['picture']}')"
 
         cursor.execute(sql)
         mysql.connection.commit()
@@ -47,8 +47,8 @@ class Student:
         try:
             sql = f"UPDATE `ssis`.`student` \
                     SET `id` = '{student_info['id']}', `firstname` = '{student_info['firstname']}', `lastname` = '{student_info['lastname']}', \
-                    `course` = '{student_info['course']}', `year` = {student_info['year']}, `gender` = '{student_info['gender']}' \
-                    WHERE `id` = '{studentID}'"
+                    `course` = '{student_info['course']}', `year` = {student_info['year']}, `gender` = '{student_info['gender']}', \
+                    `profile_pic` = '{student_info['picture']}' WHERE `id` = '{studentID}'"
                     
             print(sql)
 
