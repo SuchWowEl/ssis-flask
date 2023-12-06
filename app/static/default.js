@@ -559,26 +559,69 @@
         var file    = document.getElementById('profile-image-upload').files[0];
         var reader  = new FileReader();
       
+        if (file) {
+          reader.readAsDataURL(file);
+        }
+      
         reader.addEventListener("load", function () {
           preview.style.height = '150px';
           preview.style.width = '150px';
           preview.style.objectFit = 'cover';
           preview.src = reader.result;
+
+          document.getElementById("delete-image").classList.remove("cursor-not-allowed");
+          document.getElementById("delete-image").classList.add("cursor-pointer");
         }, false);
-      
-        if (file) {
-          reader.readAsDataURL(file);
-        }
       }
       
       document
-        .getElementById("profile-image1")
+        .getElementById("upload-image")
         .addEventListener("click", function() {
             $('#profile-image-upload').click();
         });
       document
         .getElementById("profile-image-upload")
         .addEventListener("change", previewFile);
+
+      document
+        .getElementById("delete-image")
+        .addEventListener("click", removeImage);
+
+      function removeImage(){
+        var file    = document.getElementById('profile-image-upload').files[0];
+        var reader  = new FileReader();
+      
+        if (file) {
+          reader.readAsDataURL(file);
+          console.log("checking if there's a pic");
+          // replace both profile-image-upload profile-image
+          console.log("there's a pic to be removed");
+          var newRemove = $("<input id='profile-image-upload' accept='image/*' class='hidden' type='file' multiple='false'>");
+          var preview = document.getElementById('profile-image');
+
+          //replace with default_pic
+          preview.style.height = '150px';
+          preview.style.width = '150px';
+          preview.style.objectFit = 'cover';
+          preview.src = 'static/default_pic.svg';
+      
+          // replace the old input with the new one
+          $("#profile-image-upload").replaceWith(newRemove);
+          
+          document.getElementById("delete-image").classList.add("cursor-not-allowed");
+          document.getElementById("delete-image").classList.remove("cursor-pointer");
+
+          document
+            .getElementById("upload-image")
+            .addEventListener("click", function() {
+                $('#profile-image-upload').click();
+            });
+          document
+            .getElementById("profile-image-upload")
+            .addEventListener("change", previewFile);
+          console.log("DELETED");
+        }
+      }
 
     //}
 
