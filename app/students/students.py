@@ -84,7 +84,7 @@ def students_edit():
         else:
             secure_url = ""
         data['profile_pic'] = secure_url
-        if studentid != data['id']: # if id_changed or pic_delete
+        if studentid != data['id'] or secure_url == "": # if id_changed or pic_delete
             print("delete old id")
             uploader.destroy("SSIS/"+studentid) # delete old pic
     if studentid != data['id'] and old_info[6] == new_pic: # if id_changed and not pic_changed
