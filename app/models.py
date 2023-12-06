@@ -70,7 +70,7 @@ class Student:
                 ON student.course = course.`code` \
                 INNER JOIN ssis.college \
                 ON college.`code` = course.`college`\
-                ORDER BY student.time_updated DESC, CODE ASC, id ASC"
+                ORDER BY student.time_updated DESC, id ASC"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
@@ -224,7 +224,7 @@ class Course:
     def all(self):
         cursor = mysql.connection.cursor()
 
-        sql = "SELECT * from ssis.course ORDER BY time_updated DESC, CODE ASC"
+        sql = "SELECT code, name, college from ssis.course ORDER BY time_updated DESC, code ASC"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
@@ -236,13 +236,13 @@ class Course:
 
         sql = ""
         if(header != "gender"):
-            sql = f"SELECT * \
+            sql = f"SELECT code, name, college \
                 FROM `ssis`.`course` \
-                WHERE `{header}` LIKE '%{value}%' ORDER BY time_updated DESC, CODE ASC;"
+                WHERE `{header}` LIKE '%{value}%' ORDER BY time_updated DESC, code ASC;"
         else:
-            sql = f"SELECT * \
+            sql = f"SELECT code, name, college \
                 FROM `ssis`.`course` \
-                WHERE `{header}`  '{value}' ORDER BY time_updated DESC, CODE ASC;"
+                WHERE `{header}`  '{value}' ORDER BY time_updated DESC, code ASC;"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
@@ -267,7 +267,8 @@ class Course:
         result = cursor.fetchall()
         values = []
         for inner_tuple in result:
-            values.append(inner_tuple[0])
+            if inner_tuple[0] != "time_updated":
+                values.append(inner_tuple[0])
         tuplevar = tuple(values)
         return tuplevar
 
@@ -310,7 +311,7 @@ class College:
         cursor = mysql.connection.cursor()
         print("a college triggered")
 
-        sql = f"SELECT * from `ssis`.`college` where (`code` = '{code}') ORDER BY time_updated DESC, CODE ASC"
+        sql = f"SELECT code, name from `ssis`.`college` where (`code` = '{code}') ORDER BY time_updated DESC, code ASC"
         cursor.execute(sql)
         result = cursor.fetchone() 
         print("retreived college from model:")
@@ -366,7 +367,7 @@ class College:
     def all(self):
         cursor = mysql.connection.cursor()
 
-        sql = "SELECT * from `ssis`.`college` ORDER BY time_updated DESC, CODE ASC"
+        sql = "SELECT code, name from `ssis`.`college` ORDER BY time_updated DESC, code ASC"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
@@ -376,9 +377,9 @@ class College:
         cursor = mysql.connection.cursor()
         print("courses search")
 
-        sql = f"SELECT * \
+        sql = f"SELECT code, name \
             FROM `ssis`.`college` \
-            WHERE `{header}` LIKE '%{value}%' ORDER BY time_updated DESC, CODE ASC;"
+            WHERE `{header}` LIKE '%{value}%' ORDER BY time_updated DESC, code ASC;"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
@@ -394,7 +395,8 @@ class College:
         result = cursor.fetchall()
         values = []
         for inner_tuple in result:
-            values.append(inner_tuple[0])
+            if inner_tuple[0] != "time_updated":
+                values.append(inner_tuple[0])
         tuplevar = tuple(values)
         return tuplevar
 
