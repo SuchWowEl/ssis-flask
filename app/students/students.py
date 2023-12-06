@@ -72,11 +72,11 @@ def students_edit():
     data = request.get_json()
     
     pic_link = data['picture']
-    if pic_link:
+    if pic_link != "static/default_pic.svg":
         upload_result = upload(pic_link, folder="SSIS", resource_type='image')
         secure_url = upload_result['secure_url']
     else:
-        secure_url = None
+        secure_url = ""
     data['picture'] = secure_url
     
     print("form: " + str(data))
