@@ -700,7 +700,7 @@
               }
           });
           formData = {
-            picture: document.getElementById('profile-image').getAttribute('src'),
+            profile_pic: document.getElementById('profile-image').getAttribute('src'),
             id: $("#id").val().trim(),
             firstname: $("#firstname").val(),
             lastname: $("#lastname").val(),
