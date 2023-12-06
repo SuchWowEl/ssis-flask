@@ -2,6 +2,7 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for, jsonify
 )
 from werkzeug.exceptions import abort
+from cloudinary import uploader
 from cloudinary.uploader import upload
 from cloudinary.utils import cloudinary_url
 
@@ -37,13 +38,14 @@ def students_add():
     data = request.get_json()
     #print("form: " + str(data))
     try:
-        pic_link = data['picture']
+        pic_link = data['profile_pic']
         if pic_link != "static/default_pic.svg":
-            upload_result = upload(pic_link, folder="SSIS", resource_type='image')
+            upload_result = upload(pic_link, public_id = data['id'], 
+            overwrite = True,folder="SSIS", resource_type='image')
             secure_url = upload_result['secure_url']
         else:
             secure_url = ""
-        data['picture'] = secure_url
+        data['profile_pic'] = secure_url
         print(f"secure_url: {secure_url}")
         student_interface.add(data)
         return jsonify({'response':True})
@@ -68,16 +70,25 @@ def students_edit_view():
 @bp.route('/students/editstudent/', methods=['POST'])
 def students_edit():
     global studentid 
-    print("students_edit called")
     data = request.get_json()
+    new_pic = data['profile_pic']
     
-    pic_link = data['picture']
-    if pic_link != "static/default_pic.svg":
-        upload_result = upload(pic_link, folder="SSIS", resource_type='image')
-        secure_url = upload_result['secure_url']
-    else:
-        secure_url = ""
-    data['picture'] = secure_url
+    secure_url = ""
+    old_info = student_interface.retrieve_student(studentid)
+    if old_info[6] != new_pic: # if pic_changed
+        # upload
+        if new_pic != "static/default_pic.svg": # there's a new pic
+            upload_result = upload(new_pic, public_id = data['id'], 
+            overwrite = True, folder="SSIS", resource_type='image')
+            secure_url = upload_result['secure_url']
+        else:
+            secure_url = ""
+        data['profile_pic'] = secure_url
+        if studentid != data['id']: # if id_changed or pic_delete
+            print("delete old id")
+            uploader.destroy("SSIS/"+studentid) # delete old pic
+    if studentid != data['id'] and old_info[6] == new_pic: # if id_changed and not pic_changed
+        uploader.rename("SSIS/"+studentid, "SSIS/"+data['id'])
     
     print("form: " + str(data))
     response = student_interface.update(data, studentid)
@@ -103,6 +114,9 @@ def students_delete():
     if response != True:
         print("delete failed")
         response = str(response)
+    else:
+        for public_id in list:
+            uploader.destroy("SSIS/"+public_id) # delete old pic
     return jsonify({'response': response})
 
 @bp.route('/students/search/', methods=['GET'])
