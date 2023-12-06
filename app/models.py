@@ -70,7 +70,7 @@ class Student:
                 ON student.course = course.`code` \
                 INNER JOIN ssis.college \
                 ON college.`code` = course.`college`\
-                ORDER BY time_updated DESC, id ASC"
+                ORDER BY student.time_updated DESC, CODE ASC, id ASC"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
@@ -224,7 +224,7 @@ class Course:
     def all(self):
         cursor = mysql.connection.cursor()
 
-        sql = "SELECT * from ssis.course"
+        sql = "SELECT * from ssis.course ORDER BY time_updated DESC, CODE ASC"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
@@ -238,11 +238,11 @@ class Course:
         if(header != "gender"):
             sql = f"SELECT * \
                 FROM `ssis`.`course` \
-                WHERE `{header}` LIKE '%{value}%';"
+                WHERE `{header}` LIKE '%{value}%' ORDER BY time_updated DESC, CODE ASC;"
         else:
             sql = f"SELECT * \
                 FROM `ssis`.`course` \
-                WHERE `{header}`  '{value}';"
+                WHERE `{header}`  '{value}' ORDER BY time_updated DESC, CODE ASC;"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
@@ -310,7 +310,7 @@ class College:
         cursor = mysql.connection.cursor()
         print("a college triggered")
 
-        sql = f"SELECT * from `ssis`.`college` where (`code` = '{code}')"
+        sql = f"SELECT * from `ssis`.`college` where (`code` = '{code}') ORDER BY time_updated DESC, CODE ASC"
         cursor.execute(sql)
         result = cursor.fetchone() 
         print("retreived college from model:")
@@ -366,7 +366,7 @@ class College:
     def all(self):
         cursor = mysql.connection.cursor()
 
-        sql = "SELECT * from `ssis`.`college`"
+        sql = "SELECT * from `ssis`.`college` ORDER BY time_updated DESC, CODE ASC"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
@@ -378,7 +378,7 @@ class College:
 
         sql = f"SELECT * \
             FROM `ssis`.`college` \
-            WHERE `{header}` LIKE '%{value}%';"
+            WHERE `{header}` LIKE '%{value}%' ORDER BY time_updated DESC, CODE ASC;"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
