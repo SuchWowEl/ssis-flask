@@ -594,18 +594,20 @@
         }, false);
       }
       
-      document
-        .getElementById("upload-image")
-        .addEventListener("click", function() {
-            $('#profile-image-upload').click();
-        });
-      document
-        .getElementById("profile-image-upload")
-        .addEventListener("change", previewFile);
+      if (tableUrl=="/students/"){
+        document
+          .getElementById("upload-image")
+          .addEventListener("click", function() {
+              $('#profile-image-upload').click();
+          });
+        document
+          .getElementById("profile-image-upload")
+          .addEventListener("change", previewFile);
 
-      document
-        .getElementById("delete-image")
-        .addEventListener("click", removeImage);
+        document
+          .getElementById("delete-image")
+          .addEventListener("click", removeImage);
+      }
 
       function removeImage(){
         var file    = document.getElementById('profile-image');
