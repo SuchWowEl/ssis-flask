@@ -33,9 +33,9 @@ class Student:
         
         print(student_info)
 
-        sql = f"INSERT INTO `ssis`.`student` (`id`, `firstname`, `lastname`, `course`, `year`, `gender`, `profile_pic`) \
+        sql = f"INSERT INTO `ssis`.`student` (`id`, `firstname`, `lastname`, `course`, `year`, `gender`, `profile_pic`, `time_updated`) \
        VALUES ('{student_info['id']}', '{student_info['firstname']}', '{student_info['lastname']}', '{student_info['course']}', \
-               '{student_info['year']}', '{student_info['gender']}', '{student_info['picture']}')"
+               '{student_info['year']}', '{student_info['gender']}', '{student_info['picture']}', CURRENT_TIMESTAMP)"
 
         cursor.execute(sql)
         mysql.connection.commit()
@@ -48,7 +48,7 @@ class Student:
             sql = f"UPDATE `ssis`.`student` \
                     SET `id` = '{student_info['id']}', `firstname` = '{student_info['firstname']}', `lastname` = '{student_info['lastname']}', \
                     `course` = '{student_info['course']}', `year` = {student_info['year']}, `gender` = '{student_info['gender']}', \
-                    `profile_pic` = '{student_info['picture']}' WHERE `id` = '{studentID}'"
+                    `profile_pic` = '{student_info['picture']}', `time_updated` = CURRENT_TIMESTAMP  WHERE `id` = '{studentID}'"
                     
             print(sql)
 
@@ -69,7 +69,8 @@ class Student:
                 INNER JOIN ssis.course \
                 ON student.course = course.`code` \
                 INNER JOIN ssis.college \
-                ON college.`code` = course.`college`"
+                ON college.`code` = course.`college`\
+                ORDER BY time_updated DESC, id ASC"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
