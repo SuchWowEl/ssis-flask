@@ -399,6 +399,22 @@
         "X-CSRFToken": csrfToken,
       },
       data: JSON.stringify(formData),
+      beforeSend: function(xhr){
+        if (tableUrl=="/students/"){
+          $.ajax({
+            url: '/students/loading',  // Replace with your Flask route
+            method: 'GET',
+            success: function(data) {
+                // Append the dynamic content to the modal
+                console.log("modal appended");
+                $('#modal').append(data);
+            },
+            error: function(error) {
+                console.error('Error fetching dynamic content:', error);
+            }
+          });
+        }
+      },
       success: function(data) {
         console.log("before if-else");
         console.log(data);
@@ -406,6 +422,10 @@
           const element = document.getElementById(tableUrl.slice(1, -1));
           if (element) {
             element.click();
+          }
+          if(tableUrl == "/students/"){
+            console.log("loading removed");
+            $('.loading').remove();
           }
           alert(tableUrl.slice(1, -2)+ ((selectedStudent.length>1) ? "s have" : " has" )+" been deleted");
         }
@@ -588,11 +608,11 @@
         .addEventListener("click", removeImage);
 
       function removeImage(){
-        var file    = document.getElementById('profile-image-upload').files[0];
+        var file    = document.getElementById('profile-image');
         var reader  = new FileReader();
+        console.log("removeImage()");
       
-        if (file) {
-          reader.readAsDataURL(file);
+        if (file.getAttribute("src") !== "") {
           console.log("checking if there's a pic");
           // replace both profile-image-upload profile-image
           console.log("there's a pic to be removed");
