@@ -584,13 +584,20 @@
         }
       
         reader.addEventListener("load", function () {
-          preview.style.height = '150px';
-          preview.style.width = '150px';
-          preview.style.objectFit = 'cover';
-          preview.src = reader.result;
+          var src = reader.result;
+          var base64str = src.split('base64,')[1];
+          var decoded = atob(base64str);
+          console.log("file size: "+decoded.length);
+          if(decoded.length < 1000000){
+            preview.style.height = '150px';
+            preview.style.width = '150px';
+            preview.style.objectFit = 'cover';
+            preview.src = reader.result;
 
-          document.getElementById("delete-image").classList.remove("cursor-not-allowed");
-          document.getElementById("delete-image").classList.add("cursor-pointer");
+            document.getElementById("delete-image").classList.remove("cursor-not-allowed");
+            document.getElementById("delete-image").classList.add("cursor-pointer");
+          }
+          else alert("File must be under 1mb");
         }, false);
       }
       
@@ -695,6 +702,9 @@
           }
           else{
             alert(response["response"]);
+            if(document.getElementsByClassName("loading") !== null){
+              $('.loading').remove();
+            }
           }
         },
       });

@@ -40,9 +40,22 @@ def students_add():
     try:
         pic_link = data['profile_pic']
         if pic_link != "static/default_pic.svg":
-            upload_result = upload(pic_link, public_id = data['id'], 
-            overwrite = True,folder="SSIS", resource_type='image')
-            secure_url = upload_result['secure_url']
+            print(f"pic_link: {pic_link}")
+            y = pic_link[len(pic_link) - 2:]
+            y = (y=="==")+1
+            # if y == "==":
+            #     y = 2
+            # else:
+            #     y = 1
+            x = (len(pic_link) * (3/4)) - y
+            print(f"size of pic: {x}")
+            if(x < 1000000):
+                print(f"pic_link: {pic_link}")
+                upload_result = upload(pic_link, public_id = data['id'], 
+                overwrite = True,folder="SSIS", resource_type='image')
+                secure_url = upload_result['secure_url']
+            else:
+                return jsonify({'response': "File must be under 1mb"})
         else:
             secure_url = ""
         data['profile_pic'] = secure_url
@@ -78,9 +91,21 @@ def students_edit():
     if old_info[6] != new_pic: # if pic_changed
         # upload
         if new_pic != "static/default_pic.svg": # there's a new pic
-            upload_result = upload(new_pic, public_id = data['id'], 
-            overwrite = True, folder="SSIS", resource_type='image')
-            secure_url = upload_result['secure_url']
+            print(f"pic_link: {new_pic}")
+            y = new_pic[len(new_pic) - 2:]
+            y = (y=="==")+1
+            # if y == "==":
+            #     y = 2
+            # else:
+            #     y = 1
+            x = (len(new_pic) * (3/4)) - y
+            print(f"size of pic: {x}")
+            if(x < 1000000):
+                upload_result = upload(new_pic, public_id = data['id'], 
+                overwrite = True, folder="SSIS", resource_type='image')
+                secure_url = upload_result['secure_url']
+            else:
+                return jsonify({'response': "File must be under 1mb"})
         else:
             secure_url = ""
         data['profile_pic'] = secure_url
